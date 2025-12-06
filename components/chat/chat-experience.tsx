@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import { DefaultChatTransport } from "ai";
 import { useChat } from "@ai-sdk/react";
-import { Shield, Sparkles, Zap } from "lucide-react";
+import { Check, Zap } from "lucide-react";
 import { ChatInput } from "@/components/chat/chat-input";
 import { MessagesPanel } from "@/components/chat/messages-panel";
 import { QuickActionsPopup } from "@/components/chat/quick-actions-popup";
@@ -40,6 +40,7 @@ export const ChatExperience = () => {
     >({});
     const [showQuickActions, setShowQuickActions] = useState(false);
     const [isResetting, setIsResetting] = useState(false);
+    const [resetSuccess, setResetSuccess] = useState(false);
     const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
     const chatContainerRef = useRef<HTMLDivElement>(null);
     const messagesContainerRef = useRef<HTMLDivElement>(null);
@@ -169,7 +170,9 @@ export const ChatExperience = () => {
     const handleResetLimit = async () => {
         setIsResetting(true);
         await setTransactionLimit(state.user.card.defaultTransactionLimit);
-        setTimeout(() => setIsResetting(false), 500);
+        setIsResetting(false);
+        setResetSuccess(true);
+        setTimeout(() => setResetSuccess(false), 1500);
     };
 
     const handleQuickAction = async (prompt: string) => {
@@ -224,29 +227,37 @@ export const ChatExperience = () => {
                     isKeyboardOpen ? "input-fixed-bottom" : "mt-auto"
                 }`}
             >
-                {state.user.card.transactionLimit !==
-                    state.user.card.defaultTransactionLimit && (
+                {(state.user.card.transactionLimit !==
+                    state.user.card.defaultTransactionLimit ||
+                    resetSuccess) && (
                     <div className="mb-3 flex items-center justify-center">
-                        <button
-                            onClick={handleResetLimit}
-                            disabled={isResetting}
-                            className="flex items-center gap-2 rounded-full border border-white/20 bg-white/10 backdrop-blur-md px-4 py-2 text-xs font-medium text-white transition-all hover:bg-white/20 hover:border-white/30 active:scale-95 disabled:opacity-70"
-                        >
-                            <span>
-                                Limit changed to {state.user.currency}{" "}
-                                {state.user.card.transactionLimit}
-                            </span>
-                            <span className="text-white/50">•</span>
-                            <span
-                                className={`text-blue-400 transition-all ${
-                                    isResetting ? "scale-95 opacity-70" : ""
-                                }`}
+                        {resetSuccess ? (
+                            <div className="flex items-center gap-2 rounded-full border border-green-400/30 bg-green-500/20 backdrop-blur-md px-4 py-2 text-xs font-medium text-green-300 animate-in fade-in zoom-in-95 duration-200">
+                                <Check className="h-3.5 w-3.5" />
+                                <span>Limit reset to default</span>
+                            </div>
+                        ) : (
+                            <button
+                                onClick={handleResetLimit}
+                                disabled={isResetting}
+                                className="flex items-center gap-2 rounded-full border border-white/20 bg-white/10 backdrop-blur-md px-4 py-2 text-xs font-medium text-white transition-all hover:bg-white/20 hover:border-white/30 active:scale-95 disabled:opacity-70"
                             >
-                                {isResetting
-                                    ? "Resetting..."
-                                    : "Reset to default"}
-                            </span>
-                        </button>
+                                <span>
+                                    Limit changed to {state.user.currency}{" "}
+                                    {state.user.card.transactionLimit}
+                                </span>
+                                <span className="text-white/50">•</span>
+                                <span
+                                    className={`text-blue-400 transition-all ${
+                                        isResetting ? "scale-95 opacity-70" : ""
+                                    }`}
+                                >
+                                    {isResetting
+                                        ? "Resetting..."
+                                        : "Reset to default"}
+                                </span>
+                            </button>
+                        )}
                     </div>
                 )}
                 <div className="relative flex items-end gap-3">
