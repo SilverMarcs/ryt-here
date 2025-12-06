@@ -221,7 +221,9 @@ export function MobileApp() {
                 {/* Profile Screen */}
                 {isProfileOpen && (
                     <div className="absolute inset-0 z-40 h-full w-full bg-background animate-in slide-in-from-right duration-300">
-                        <UserProfileScreen onClose={handleCloseProfile} />
+                        <BankProvider>
+                            <UserProfileScreen onClose={handleCloseProfile} />
+                        </BankProvider>
                     </div>
                 )}
             </div>
