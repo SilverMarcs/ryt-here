@@ -6,6 +6,8 @@ Try it now: [ryt-here.vercel.app](https://ryt-here.vercel.app)
 
 Powered by Claude Sonnet 4.5 from Anthropic.
 
+> **Note:** Most of the banking UI displayed when the project loads is a placeholder. Click the **"I'm Ryt Here"** button in the top center to launch the main AI chat interface. This is the core of the project. Other UI sections are non-functional placeholders.
+
 ## Hackathon Tracks
 
 This project is built for the following hackathon tracks:
