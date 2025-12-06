@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
     ArrowLeft,
     Copy,
@@ -11,12 +12,25 @@ import {
     MessageSquareText,
     LogOut,
 } from "lucide-react";
+import { AccountsLimitsScreen } from "./accounts-limits-screen";
 
 type UserProfileScreenProps = {
     onClose?: () => void;
 };
 
 export const UserProfileScreen = ({ onClose }: UserProfileScreenProps) => {
+    const [currentScreen, setCurrentScreen] = useState<"profile" | "accounts-limits">(
+        "profile"
+    );
+
+    if (currentScreen === "accounts-limits") {
+        return (
+            <AccountsLimitsScreen
+                onClose={() => setCurrentScreen("profile")}
+            />
+        );
+    }
+
     return (
         <div className="bg-background min-h-full pb-20">
             {/* Header */}
@@ -97,6 +111,11 @@ export const UserProfileScreen = ({ onClose }: UserProfileScreenProps) => {
                         <button
                             key={item.label}
                             className="w-full flex items-center justify-between p-4 bg-card border border-border rounded-xl hover:bg-muted"
+                            onClick={() => {
+                                if (item.label === "Accounts and limits") {
+                                    setCurrentScreen("accounts-limits");
+                                }
+                            }}
                         >
                             <div className="flex items-center gap-3">
                                 <item.icon className="w-5 h-5 text-foreground" />
