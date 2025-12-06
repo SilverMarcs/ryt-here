@@ -11,6 +11,7 @@ import { buildSetCardStatusTool } from "./set-card-status";
 import { buildTransferMoneyTool } from "./transfer-money";
 import { buildUpdateTransactionLimitTool } from "./update-transaction-limit";
 import { buildGetCurrentLimitTool } from "./get-current-limit";
+import { buildAddContactTool } from "./add-contact";
 
 export const BANK_TOOL_NAMES = [
   "get_recent_transactions",
@@ -23,6 +24,7 @@ export const BANK_TOOL_NAMES = [
   "get_account_statement",
   "manage_savings_goal",
   "query_transactions",
+  "add_contact",
 ] as const;
 
 export const buildBankTools = (initialState: BankState) => {
@@ -45,5 +47,6 @@ export const buildBankTools = (initialState: BankState) => {
     get_account_statement: buildGetAccountStatementTool(context),
     manage_savings_goal: buildSavingsGoalTool(context),
     query_transactions: buildQueryTransactionsTool(context),
+    add_contact: buildAddContactTool(context),
   } satisfies ToolSet;
 };

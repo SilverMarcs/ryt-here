@@ -26,9 +26,11 @@ import {
 import { PendingRequestsList } from "@/components/tools/pending-requests-list";
 import { AccountStatement } from "@/components/tools/account-statement";
 import { SavingsGoalCard } from "@/components/tools/savings-goal-card";
+import { AddContactCard } from "@/components/tools/add-contact-card";
 import { BankUIMessage } from "@/types/ui";
 import {
   AccountStatementOutput,
+  AddContactOutput,
   CardStatusChangeOutput,
   MoneyRequestOutput,
   QueryTransactionsOutput,
@@ -73,6 +75,7 @@ interface ToolRendererOptions {
   setPendingLimits: Dispatch<SetStateAction<PendingLimitState>>;
   setCardStatus: (status: BankState["user"]["card"]["status"]) => void;
   setTransactionLimit: (newLimit: number) => void;
+  setState: Dispatch<SetStateAction<BankState>>;
   contributeToGoal?: (goalId: string, amount: number) => void;
 }
 
@@ -84,6 +87,7 @@ export const useToolRenderers = ({
   setPendingLimits,
   setCardStatus,
   setTransactionLimit,
+  setState,
   contributeToGoal,
 }: ToolRendererOptions) => {
   const renderTransfer = (part: ToolPartWithOutput) => {
@@ -555,6 +559,76 @@ export const useToolRenderers = ({
       );
   };
 
+  const renderAddContact = (part: ToolPartWithOutput) => {
+      if (!isOutputReady(part) || !part.output) {
+        return (
+          <div className="text-xs text-muted-foreground">
+            Adding contact…
+          </div>
+        );
+      }
+
+      const output = part.output as AddContactOutput;
+
+      if (output.status === "needs_confirmation") {
+        return (
+          <AddContactCard
+            data={{
+              contact: output.contact,
+              message: output.message,
+            }}
+            onConfirm={async () => {
+              // Update state to add the contact
+              setState((prev) => ({
+                ...prev,
+                contacts: [output.contact, ...prev.contacts],
+              }));
+              
+              await addToolOutput({
+                tool: "add_contact",
+                toolCallId: part.toolCallId,
+                output: {
+                  ...output,
+                  status: "confirmed",
+                },
+              });
+            }}
+            onCancel={async () => {
+              await addToolOutput({
+                tool: "add_contact",
+                toolCallId: part.toolCallId,
+                output: { ...output, status: "cancelled" },
+              });
+            }}
+          />
+        );
+      }
+
+      if (output.status === "confirmed") {
+        return (
+          <div className="rounded-xl bg-green-500/10 border border-green-500/30 px-3 py-2.5 text-xs space-y-2">
+            <p className="font-semibold text-green-400">Contact added successfully</p>
+            <p className="text-muted-foreground">
+              {output.contact.name} has been added to your contacts. You can now send money to them.
+            </p>
+          </div>
+        );
+      }
+
+      if (output.status === "cancelled") {
+        return (
+          <div className="rounded-xl bg-destructive/10 border border-destructive/30 px-3 py-2.5 text-xs">
+            <p className="font-semibold text-destructive">Contact not added</p>
+            {output.message && (
+              <p className="text-muted-foreground mt-0.5">{output.message}</p>
+            )}
+          </div>
+        );
+      }
+
+      return null;
+  };
+
   const isRenderablePart = (
     part: BankMessagePart,
     hasVisualToolContent: boolean,
@@ -623,6 +697,9 @@ export const useToolRenderers = ({
       if (part.type === "tool-query_transactions") {
         return <div key={part.toolCallId}>{renderQueryTransactions(part)}</div>;
       }
+      if (part.type === "tool-add_contact") {
+        return <div key={part.toolCallId}>{renderAddContact(part)}</div>;
+      }
       return null;
   };
 
@@ -640,6 +717,7 @@ export const useToolRenderers = ({
         "tool-get_account_statement",
         "tool-manage_savings_goal",
         "tool-query_transactions", // Now a visual tool
+        "tool-add_contact",
       ];
       
       const hasVisualToolContent =

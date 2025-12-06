@@ -57,6 +57,7 @@ CAPABILITIES:
 - Available tools: ${toolList}
 - If a user requests something banking related outside the available tools, say "This feature is coming soon!"
 - When a request matches an available tool, use it confidently.
+- When the user wants to send money to a new contact, use add_contact first to add them, then they can transfer money to them in the same session.
 
 QUERY_TRANSACTIONS TOOL GUIDE:
 This is an intelligent analysis tool that gives you access to all user transactions. Use it for open-ended financial questions like:
