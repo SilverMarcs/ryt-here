@@ -1,37 +1,69 @@
-hi
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Ryt Here
+
+A digital banking application incorporating agentic AI, enabling users to manage their finances through natural language conversations.
+
+Try it now: [ryt-here.vercel.app](https://ryt-here.vercel.app)
+
+Powered by Claude Sonnet 4.5 from Anthropic.
+
+## Hackathon Tracks
+
+This project is built for the following hackathon tracks:
+- Cursor
+- Anthropic
+- Coderabbit
+- Ryt Bank
+
+## Overview
+
+Ryt Here is a conversational banking experience that combines modern digital banking features with intelligent AI. Users can interact with their bank account, make transfers, analyze spending, and manage their finances entirely through natural language conversations.
+
+## Features
+
+- View and analyze recent transactions with category filtering
+- Generate detailed account statements for any time period
+- Transfer money to contacts with automatic limit checking
+- Analyze spending patterns with visual charts
+- Freeze or unfreeze your card instantly
+- Manage transaction limits with an interactive slider
+- Create and track savings goals with deadlines
+- Request money with shareable payment links and QR codes
+- Check account balance and card status in real-time
+- Add new contacts directly through conversation
+
+## Try These Prompts
+
+- "Show my recent transactions"
+- "Analyze my spending this month"
+- "Transfer RM 100 to Sarah"
+- "Freeze my card"
+- "Set my transaction limit to RM 5000"
+- "Create a savings goal of RM 10000 for vacation"
+- "Which subscriptions increased in price?"
+- "Generate an account statement for the last 30 days"
+- "How much did I spend on food last week?"
+- "Request RM 500 from Alex for dinner"
 
 ## Getting Started
 
-First, run the development server:
+Install dependencies:
+
+```bash
+npm install
+# or
+pnpm install
+# or
+bun install
+```
+
+Run the development server:
 
 ```bash
 npm run dev
 # or
-yarn dev
-# or
 pnpm dev
 # or
-bun dev
+bun run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Open [http://localhost:3000](http://localhost:3000) in your browser to start chatting.
