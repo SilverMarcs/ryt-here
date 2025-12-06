@@ -4,6 +4,44 @@ export const buildSystemPrompt = (state: BankState, toolNames: string[]) => {
   const toolList =
     toolNames.length === 0 ? "none" : toolNames.map((name) => name).join(", ");
 
+  // Format card status info
+  const cardInfo = `Status: ${state.user.card.status}, Last 4 digits: ${state.user.card.lastFourDigits}, Transaction limit: RM ${state.user.card.transactionLimit.toFixed(2)}`;
+
+  // Format savings goals
+  const savingsGoalsInfo = state.savingsGoals.length === 0
+    ? "No savings goals yet."
+    : state.savingsGoals.map((goal) => {
+        const progress = ((goal.currentAmount / goal.targetAmount) * 100).toFixed(1);
+        const deadlineInfo = goal.deadline ? `, Deadline: ${goal.deadline}` : "";
+        return `- ${goal.name} (${goal.status}): RM ${goal.currentAmount.toFixed(2)} / RM ${goal.targetAmount.toFixed(2)} (${progress}%)${deadlineInfo}`;
+      }).join("\n");
+
+  // Format contacts
+  const contactsInfo = state.contacts.length === 0
+    ? "No saved contacts."
+    : state.contacts.map((contact) => 
+        `- ${contact.name}: ${contact.accountNumber} (${contact.bank})`
+      ).join("\n");
+
+  // Format pending money requests
+  const pendingRequests = state.moneyRequests.filter((r) => r.status === "pending");
+  const pendingRequestsInfo = pendingRequests.length === 0
+    ? "No pending requests."
+    : pendingRequests.map((req) => {
+        const isOutgoing = req.requesterId === state.user.id;
+        const direction = isOutgoing ? `Requested from ${req.recipientName}` : `${req.requesterName} requested from you`;
+        const noteInfo = req.note ? ` - "${req.note}"` : "";
+        return `- ${direction}: RM ${req.amount.toFixed(2)}${noteInfo} (expires: ${req.expiresAt.split("T")[0]})`;
+      }).join("\n");
+
+  // Current date
+  const currentDate = new Date().toLocaleDateString("en-MY", {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+
   return `
 You are a helpful AI banking assistant for MyBank. Keep responses concise and mobile-friendly.
 Only engage on MyBank banking topics and supported actions—politely decline unrelated or off-topic requests.
@@ -38,7 +76,22 @@ RULES:
 - Format money as "RM X.XX".
 - For most tools: call the tool to surface the confirmation card and wait for the user's action there. If you already have the details, don't ask for additional confirmation before calling the tool.
 
+TODAY'S DATE: ${currentDate}
+
 CURRENT USER: ${state.user.name}
 ACCOUNT: ${state.user.accountNumber}
+BALANCE: RM ${state.user.balance.toFixed(2)}
+
+CARD INFO:
+${cardInfo}
+
+SAVINGS GOALS:
+${savingsGoalsInfo}
+
+SAVED CONTACTS:
+${contactsInfo}
+
+PENDING MONEY REQUESTS:
+${pendingRequestsInfo}
   `.trim();
 }
