@@ -60,7 +60,7 @@ export const TransferReceipt = ({ data }: { data: TransferReceiptData }) => {
             </p>
           ) : null}
         </div>
-        <div className="rounded-xl bg-card px-2 py-3 text-sm">
+        <div className="rounded-xl bg-card px-2 py-3 text-sm pt-4">
           <div className="flex items-center justify-between mt-2">
             <span className="text-muted-foreground">Reference</span>
             <button

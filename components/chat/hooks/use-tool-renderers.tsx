@@ -1,7 +1,6 @@
 "use client";
 
 import {
-  useCallback,
   type Dispatch,
   type ReactNode,
   type SetStateAction,
@@ -12,7 +11,11 @@ import {
   TransactionLimitControl,
 } from "@/components/tools/transaction-limit";
 import { TransferReceipt } from "@/components/tools/transfer-receipt";
-import { TransferConfirmation } from "@/components/tools/transfer-confirmation";
+import { 
+  TransferConfirmation, 
+  TransferLimitExceeded,
+  TransferLimitIncreaseWaiting 
+} from "@/components/tools/transfer-confirmation";
 import { TransactionList } from "@/components/tools/transaction-list";
 import { SpendingChart } from "@/components/tools/spending-chart";
 import { CardStatusChange } from "@/components/tools/card-status-change";
@@ -83,8 +86,7 @@ export const useToolRenderers = ({
   setTransactionLimit,
   contributeToGoal,
 }: ToolRendererOptions) => {
-  const renderTransfer = useCallback(
-    (part: ToolPartWithOutput) => {
+  const renderTransfer = (part: ToolPartWithOutput) => {
       if (!isOutputReady(part) || !part.output) {
         return (
           <div className="text-xs text-muted-foreground">
@@ -94,6 +96,72 @@ export const useToolRenderers = ({
       }
 
       const output = part.output as TransferToolOutput;
+
+      if (output.status === "limit_exceeded") {
+        return (
+          <TransferLimitExceeded
+            data={{
+              recipientName: output.recipientName,
+              amount: output.amount,
+              note: output.note,
+              currency: output.currency,
+              contact: output.contact,
+              canProceed: output.canProceed,
+              reference: output.reference,
+              currentLimit: output.currentLimit!,
+              usedToday: output.usedToday,
+              pendingLimit: output.pendingLimit ?? output.amount,
+            }}
+            onLimitChange={(newLimit) => {
+              addToolOutput({
+                tool: "transfer_money",
+                toolCallId: part.toolCallId,
+                output: {
+                  ...output,
+                  pendingLimit: newLimit,
+                },
+              });
+            }}
+            onConfirmLimit={async () => {
+              setTransactionLimit(output.pendingLimit ?? output.amount);
+              await addToolOutput({
+                tool: "transfer_money",
+                toolCallId: part.toolCallId,
+                output: {
+                  ...output,
+                  status: "limit_increased_waiting",
+                  newLimit: output.pendingLimit ?? output.amount,
+                },
+              });
+            }}
+            onCancel={async () => {
+              await addToolOutput({
+                tool: "transfer_money",
+                toolCallId: part.toolCallId,
+                output: { ...output, status: "cancelled" },
+              });
+            }}
+          />
+        );
+      }
+
+      if (output.status === "limit_increased_waiting") {
+        return (
+          <TransferLimitIncreaseWaiting
+            data={{
+              recipientName: output.recipientName,
+              amount: output.amount,
+              note: output.note,
+              currency: output.currency,
+              contact: output.contact,
+              canProceed: output.canProceed,
+              reference: output.reference,
+              newLimit: output.newLimit!,
+              currentLimit: output.currentLimit!,
+            }}
+          />
+        );
+      }
 
       if (output.status === "needs_confirmation") {
         return (
@@ -159,12 +227,9 @@ export const useToolRenderers = ({
           Transfer cancelled.
         </div>
       );
-    },
-    [addToolOutput, executeTransfer, state.user.balance],
-  );
+  };
 
-  const renderTransactionList = useCallback(
-    (part: ToolPartWithOutput) => {
+  const renderTransactionList = (part: ToolPartWithOutput) => {
       if (!isOutputReady(part) || !part.output) {
         return (
           <div className="text-xs text-muted-foreground">
@@ -182,12 +247,9 @@ export const useToolRenderers = ({
           currency={output.currency}
         />
       );
-    },
-    [],
-  );
+  };
 
-  const renderSpending = useCallback(
-    (part: ToolPartWithOutput) => {
+  const renderSpending = (part: ToolPartWithOutput) => {
       if (!isOutputReady(part) || !part.output) {
         return (
           <div className="text-xs text-muted-foreground">
@@ -206,12 +268,9 @@ export const useToolRenderers = ({
           currency={output.currency}
         />
       );
-    },
-    [],
-  );
+  };
 
-  const renderCardStatus = useCallback(
-    (part: ToolPartWithOutput) => {
+  const renderCardStatus = (part: ToolPartWithOutput) => {
       if (!isOutputReady(part) || !part.output) {
         return (
           <div className="text-xs text-muted-foreground">
@@ -240,17 +299,9 @@ export const useToolRenderers = ({
           }}
         />
       );
-    },
-    [
-      addToolOutput,
-      setCardStatus,
-      state.user.card.lastFourDigits,
-      state.user.name,
-    ],
-  );
+  };
 
-  const renderTransactionLimitCard = useCallback(
-    (part: ToolPartWithOutput) => {
+  const renderTransactionLimitCard = (part: ToolPartWithOutput) => {
       if (!isOutputReady(part) || !part.output) {
         return (
           <div className="text-xs text-muted-foreground">Retrieving limit…</div>
@@ -306,12 +357,9 @@ export const useToolRenderers = ({
           confirmLabel="Confirm new daily limit"
         />
       );
-    },
-    [addToolOutput, pendingLimits, setPendingLimits, setTransactionLimit],
-  );
+  };
 
-  const renderMoneyRequest = useCallback(
-    (part: ToolPartWithOutput) => {
+  const renderMoneyRequest = (part: ToolPartWithOutput) => {
       if (!isOutputReady(part) || !part.output) {
         return (
           <div className="text-xs text-muted-foreground">Creating request…</div>
@@ -371,12 +419,9 @@ export const useToolRenderers = ({
           {pendingRequests}
         </div>
       );
-    },
-    [addToolOutput, state.moneyRequests, state.user.currency],
-  );
+  };
 
-  const renderAccountStatement = useCallback(
-    (part: ToolPartWithOutput) => {
+  const renderAccountStatement = (part: ToolPartWithOutput) => {
       if (!isOutputReady(part) || !part.output) {
         return (
           <div className="text-xs text-muted-foreground">
@@ -400,12 +445,9 @@ export const useToolRenderers = ({
           accountHolder={output.accountHolder}
         />
       );
-    },
-    [],
-  );
+  };
 
-  const renderSavingsGoal = useCallback(
-    (part: ToolPartWithOutput) => {
+  const renderSavingsGoal = (part: ToolPartWithOutput) => {
       if (!isOutputReady(part) || !part.output) {
         return (
           <div className="text-xs text-muted-foreground">
@@ -426,12 +468,9 @@ export const useToolRenderers = ({
           onContribute={contributeToGoal}
         />
       );
-    },
-    [contributeToGoal],
-  );
+  };
 
-  const renderQueryTransactions = useCallback(
-    (part: ToolPartWithOutput) => {
+  const renderQueryTransactions = (part: ToolPartWithOutput) => {
       if (!isOutputReady(part) || !part.output) {
         return (
           <div className="flex items-center gap-2 text-xs text-muted-foreground py-2">
@@ -463,32 +502,26 @@ export const useToolRenderers = ({
           </span>
         </div>
       );
-    },
-    [],
-  );
+  };
 
-  const isRenderablePart = useCallback(
-    (
-      part: BankMessagePart,
-      hasVisualToolContent: boolean,
-      role: "user" | "assistant",
-    ) => {
+  const isRenderablePart = (
+    part: BankMessagePart,
+    hasVisualToolContent: boolean,
+    role: "user" | "assistant",
+  ) => {
       if (part.type === "text") {
         // Show text if it has content
         // Only hide text for assistant messages with VISUAL tool content (not internal analysis)
         return Boolean((part.text ?? "").trim()) && !(role === "assistant" && hasVisualToolContent);
       }
       return true;
-    },
-    [],
-  );
+  };
 
-  const renderPart = useCallback(
-    (
-      part: BankMessagePart,
-      messageId: string,
-      role: "user" | "assistant",
-    ): RenderResult => {
+  const renderPart = (
+    part: BankMessagePart,
+    messageId: string,
+    role: "user" | "assistant",
+  ): RenderResult => {
       if (part.type === "text") {
         if (!(part.text ?? "").trim()) return null;
         if (role === "assistant") {
@@ -540,22 +573,9 @@ export const useToolRenderers = ({
         return <div key={part.toolCallId}>{renderQueryTransactions(part)}</div>;
       }
       return null;
-    },
-    [
-      renderAccountStatement,
-      renderCardStatus,
-      renderMoneyRequest,
-      renderQueryTransactions,
-      renderSavingsGoal,
-      renderSpending,
-      renderTransactionLimitCard,
-      renderTransactionList,
-      renderTransfer,
-    ],
-  );
+  };
 
-  const getVisiblePartsForMessage = useCallback(
-    (message: BankUIMessage) => {
+  const getVisiblePartsForMessage = (message: BankUIMessage) => {
       const role = message.role as "user" | "assistant";
       
       // Check for visual tool content (tools that show UI cards)
@@ -596,9 +616,7 @@ export const useToolRenderers = ({
         .filter(Boolean);
 
       return { hasToolContent: hasVisualToolContent, visibleParts, hasTextContent, isAwaitingAnalysis };
-    },
-    [isRenderablePart, renderPart],
-  );
+  };
 
   return { getVisiblePartsForMessage };
 };

@@ -5,7 +5,7 @@ export const buildSystemPrompt = (state: BankState, toolNames: string[]) => {
     toolNames.length === 0 ? "none" : toolNames.map((name) => name).join(", ");
 
   // Format card status info
-  const cardInfo = `Status: ${state.user.card.status}, Last 4 digits: ${state.user.card.lastFourDigits}, Transaction limit: RM ${state.user.card.transactionLimit.toFixed(2)}`;
+  const cardInfo = `Status: ${state.user.card.status}, Last 4 digits: ${state.user.card.lastFourDigits}`;
 
   // Format savings goals
   const savingsGoalsInfo = state.savingsGoals.length === 0
@@ -71,6 +71,26 @@ After receiving transactions from query_transactions, YOU MUST analyze them and 
 DO NOT use query_transactions for simple "show my transactions" requests - use get_recent_transactions instead.
 DO NOT use query_transactions for spending breakdowns with charts - use analyze_spending instead.
 
+TRANSACTION LIMIT:
+- The current transaction limit is ALWAYS shown in CARD INFO below (RM ${state.user.card.transactionLimit.toFixed(2)})
+- This is the LATEST limit value from the user's current state
+- Use get_current_limit ONLY if you need additional details like usedToday
+- Use update_transaction_limit with action="view" to show the interactive UI for viewing/changing limits
+- Use update_transaction_limit with action="update" and newLimit to change the limit (only after user confirms)
+
+TRANSFER MONEY FLOW:
+- When using transfer_money, the tool AUTOMATICALLY checks if the amount exceeds the current limit
+- If limit is exceeded, the tool will return status="limit_exceeded" and show:
+  1. A warning about the limit being exceeded
+  2. An interactive slider to increase the limit
+- After the user confirms the new limit:
+  1. The limit is updated immediately in the system
+  2. A 10-second processing period begins (status="limit_increased_waiting")
+  3. The user must wait for the countdown to complete
+- IMPORTANT: Do NOT offer to proceed with the transfer immediately
+- Instead, tell the user: "Your limit has been updated. Please wait 10 seconds for the change to process, then try your transfer again."
+- The user will need to make a new transfer request after the waiting period
+
 RULES:
 - Stay within banking assistance; do not discuss non-banking topics or provide general knowledge.
 - Format money as "RM X.XX".
@@ -84,6 +104,7 @@ BALANCE: RM ${state.user.balance.toFixed(2)}
 
 CARD INFO:
 ${cardInfo}
+Current Transaction Limit: RM ${state.user.card.transactionLimit.toFixed(2)}
 
 SAVINGS GOALS:
 ${savingsGoalsInfo}

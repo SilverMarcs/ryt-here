@@ -32,6 +32,10 @@ export type BankTools = {
     input: { action?: "view" | "update"; newLimit?: number };
     output: TransactionLimitOutput;
   };
+  get_current_limit: {
+    input: {};
+    output: TransactionLimitOutput;
+  };
   request_money: {
     input: {
       recipientName: string;

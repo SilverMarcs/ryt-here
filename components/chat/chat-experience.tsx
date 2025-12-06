@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { DefaultChatTransport } from "ai";
 import { useChat } from "@ai-sdk/react";
 import { Shield, Sparkles } from "lucide-react";
@@ -38,14 +38,16 @@ export const ChatExperience = () => {
     Record<string, number | undefined>
   >({});
 
-  const transport = useMemo(
-    () =>
-      new DefaultChatTransport<BankUIMessage>({
-        api: "/api/chat",
-        body: () => ({ bankState: state }),
-      }),
-    [state],
-  );
+  // Use ref to always get the latest state
+  const stateRef = useRef(state);
+  useEffect(() => {
+    stateRef.current = state;
+  }, [state]);
+
+  const transport = new DefaultChatTransport<BankUIMessage>({
+    api: "/api/chat",
+    body: () => ({ bankState: stateRef.current }),
+  });
 
   const { messages, sendMessage, status, addToolOutput } =
     useChat<BankUIMessage>({
@@ -101,6 +103,18 @@ export const ChatExperience = () => {
         </div>
       </div>
       <div className="sticky bottom-0 left-0 right-0 rounded-t-2xl border-t border-border bg-card py-3 backdrop-blur-md">
+        {state.user.card.transactionLimit !== state.user.card.defaultTransactionLimit && (
+          <div className="mb-2 flex items-center justify-center">
+            <button
+              onClick={() => setTransactionLimit(state.user.card.defaultTransactionLimit)}
+              className="flex items-center gap-2 rounded-full border border-border bg-muted px-4 py-1.5 text-xs font-medium text-foreground transition-colors hover:bg-muted/80"
+            >
+              <span>Limit changed to {state.user.currency} {state.user.card.transactionLimit}</span>
+              <span className="text-muted-foreground">•</span>
+              <span className="text-primary">Reset to default</span>
+            </button>
+          </div>
+        )}
         <ChatInput
           value={input}
           onChange={setInput}

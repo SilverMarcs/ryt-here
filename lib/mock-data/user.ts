@@ -10,5 +10,6 @@ export const mockUser: UserProfile = {
     status: "active",
     lastFourDigits: "4829",
     transactionLimit: 5000,
+    defaultTransactionLimit: 5000,
   },
 };

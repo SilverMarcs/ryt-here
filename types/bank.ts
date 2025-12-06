@@ -57,6 +57,7 @@ export interface UserProfile {
     status: CardStatus;
     lastFourDigits: string;
     transactionLimit: number;
+    defaultTransactionLimit: number;
   };
 }
 

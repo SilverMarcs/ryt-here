@@ -31,7 +31,9 @@ export type SpendingAnalysisOutput = {
 export type TransferToolStatus =
   | "needs_confirmation"
   | "completed"
-  | "cancelled";
+  | "cancelled"
+  | "limit_exceeded"
+  | "limit_increased_waiting";
 
 export type TransferToolOutput = {
   status: TransferToolStatus;
@@ -45,6 +47,10 @@ export type TransferToolOutput = {
   newBalance?: number;
   transactionId?: string;
   completedAt?: string;
+  currentLimit?: number;
+  newLimit?: number;
+  usedToday?: number;
+  pendingLimit?: number;
 };
 
 export type CardStatusChangeOutput = {

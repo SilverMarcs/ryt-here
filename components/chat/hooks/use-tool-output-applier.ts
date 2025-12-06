@@ -43,7 +43,10 @@ export const useToolOutputApplier = ({
           if (appliedToolOutputs.current.has(part.toolCallId)) return;
           const output = part.output as TransactionLimitOutput;
           if (output.newLimit !== undefined) {
-            setTransactionLimit(output.newLimit);
+            // Add 5 second delay before applying the limit change
+            setTimeout(() => {
+              setTransactionLimit(output.newLimit!);
+            }, 5000);
             appliedToolOutputs.current.add(part.toolCallId);
           }
           return;

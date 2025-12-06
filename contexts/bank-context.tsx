@@ -2,10 +2,8 @@
 
 import {
   createContext,
-  useCallback,
   useContext,
   useEffect,
-  useMemo,
   useState,
   type Dispatch,
   type SetStateAction,
@@ -90,58 +88,37 @@ export const BankProvider = ({ children }: { children: React.ReactNode }) => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
   }, [state]);
 
-  const getRecent = useCallback(
-    (params?: RecentTransactionParams) => getRecentTransactions(state, params),
-    [state],
-  );
+  const getRecent = (params?: RecentTransactionParams) => getRecentTransactions(state, params);
 
-  const summarizeSpending = useCallback(
-    (period?: SpendingPeriod, chartType?: SpendingChartType) =>
-      buildSpendingSummary(state, period, chartType),
-    [state],
-  );
+  const summarizeSpending = (period?: SpendingPeriod, chartType?: SpendingChartType) =>
+    buildSpendingSummary(state, period, chartType);
 
-  const setCardStatus = useCallback(
-    (status: CardStatus) => setState((prev) => updateCardStatus(prev, status)),
-    [],
-  );
+  const setCardStatus = (status: CardStatus) => setState((prev) => updateCardStatus(prev, status));
 
-  const setTransactionLimit = useCallback(
-    (newLimit: number) =>
-      setState((prev) => updateTransactionLimit(prev, newLimit)),
-    [],
-  );
+  const setTransactionLimit = (newLimit: number) =>
+    setState((prev) => updateTransactionLimit(prev, newLimit));
 
-  const addMoneyRequest = useCallback(
-    (intent: MoneyRequestIntent) => {
-      const { newState, request, shareUrl } = createMoneyRequest(state, intent);
-      setState(newState);
-      return { request, shareUrl };
-    },
-    [state],
-  );
+  const addMoneyRequest = (intent: MoneyRequestIntent) => {
+    const { newState, request, shareUrl } = createMoneyRequest(state, intent);
+    setState(newState);
+    return { request, shareUrl };
+  };
 
-  const executeTransfer = useCallback(
-    (intent: TransferIntent) => {
-      const { newState, reference, transaction } = performTransfer(
-        state,
-        intent,
-      );
-      setState(newState);
-      return { reference, transaction, balance: newState.user.balance };
-    },
-    [state],
-  );
+  const executeTransfer = (intent: TransferIntent) => {
+    const { newState, reference, transaction } = performTransfer(
+      state,
+      intent,
+    );
+    setState(newState);
+    return { reference, transaction, balance: newState.user.balance };
+  };
 
-  const contributeToGoal = useCallback(
-    (goalId: string, amount: number) => {
-      const { newState } = contributeToSavingsGoal(state, goalId, amount);
-      setState(newState);
-    },
-    [state],
-  );
+  const contributeToGoal = (goalId: string, amount: number) => {
+    const { newState } = contributeToSavingsGoal(state, goalId, amount);
+    setState(newState);
+  };
 
-  const refreshFromStorage = useCallback(() => {
+  const refreshFromStorage = () => {
     const cached =
       typeof window !== "undefined" && localStorage.getItem(STORAGE_KEY);
     if (!cached) return;
@@ -151,37 +128,24 @@ export const BankProvider = ({ children }: { children: React.ReactNode }) => {
     } catch {
       setState(getActiveState(initialBankState));
     }
-  }, []);
+  };
 
-  const value = useMemo<BankContextValue>(
-    () => ({
-      state,
-      setState,
-      contacts: state.contacts,
-      transactions: state.transactions,
-      savingsGoals: state.savingsGoals,
-      userBalance: formatCurrency(state.user.balance, state.user.currency),
-      getRecent,
-      summarizeSpending,
-      setCardStatus,
-      setTransactionLimit,
-      addMoneyRequest,
-      executeTransfer,
-      contributeToGoal,
-      refreshFromStorage,
-    }),
-    [
-      state,
-      getRecent,
-      summarizeSpending,
-      setCardStatus,
-      setTransactionLimit,
-      addMoneyRequest,
-      executeTransfer,
-      contributeToGoal,
-      refreshFromStorage,
-    ],
-  );
+  const value: BankContextValue = {
+    state,
+    setState,
+    contacts: state.contacts,
+    transactions: state.transactions,
+    savingsGoals: state.savingsGoals,
+    userBalance: formatCurrency(state.user.balance, state.user.currency),
+    getRecent,
+    summarizeSpending,
+    setCardStatus,
+    setTransactionLimit,
+    addMoneyRequest,
+    executeTransfer,
+    contributeToGoal,
+    refreshFromStorage,
+  };
 
   return <BankContext.Provider value={value}>{children}</BankContext.Provider>;
 };

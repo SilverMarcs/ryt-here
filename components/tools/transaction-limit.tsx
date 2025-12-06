@@ -3,6 +3,7 @@ import { Slider } from "@/components/ui/slider";
 import { Button } from "@/components/ui/button";
 import { AmountDisplay } from "@/components/shared/amount-display";
 import { ProgressBar } from "@/components/shared/progress-bar";
+import { useEffect, useState } from "react";
 
 type TransactionLimitControlProps = {
   currentLimit: number;
@@ -141,6 +142,14 @@ export const LimitUpdateSuccess = ({
   currency: string;
   onClose?: () => void;
 }) => {
+  const [countdown, setCountdown] = useState(10);
+
+  useEffect(() => {
+    if (countdown <= 0) return;
+    const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
+    return () => clearTimeout(timer);
+  }, [countdown]);
+
   return (
     <Card className="border border-border/70 shadow-md">
       <CardHeader className="flex items-center justify-between">
@@ -165,7 +174,7 @@ export const LimitUpdateSuccess = ({
             <AmountDisplay amount={next} currency={currency} emphasize />
           </div>
           <p className="mt-2 text-xs text-muted-foreground">
-            Effective immediately.
+            {countdown > 0 ? `Updating in ${countdown} second${countdown === 1 ? '' : 's'}...` : 'Limit updated!'}
           </p>
         </div>
       </CardContent>

@@ -17,7 +17,7 @@ export const buildUpdateTransactionLimitTool = (ctx: BankToolContext) =>
       if (action === "update" && typeof newLimit === "number") {
         const next = clampLimit(newLimit);
         const previous = ctx.getState().user.card.transactionLimit;
-        ctx.setState(updateTransactionLimit(ctx.getState(), next));
+        // Don't update state immediately - let the UI handle it with delay
         const result: TransactionLimitOutput = {
           action,
           currentLimit: previous,
