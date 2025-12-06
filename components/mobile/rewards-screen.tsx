@@ -87,23 +87,11 @@ export const RewardsScreen = ({ onTabChange }: RewardsScreenProps) => {
   ];
 
   return (
-    <div className="bg-white min-h-screen pb-20">
-      {/* Status Bar */}
-      <div className="flex items-center justify-between px-4 pt-2 pb-1">
-        <div className="flex items-center gap-1">
-          <span className="text-sm font-medium">02:37</span>
-          <div className="w-4 h-4 bg-gray-300 rounded" />
-        </div>
-        <div className="flex items-center gap-2">
-          <div className="w-4 h-4 bg-gray-300 rounded" />
-          <div className="w-4 h-4 bg-gray-300 rounded" />
-          <span className="text-xs">21</span>
-        </div>
-      </div>
+    <div className="bg-white min-h-full pb-20">
 
       {/* Header */}
       <div className="px-4 py-6">
-        <h1 className="text-3xl font-bold mb-4">Rewards</h1>
+        <h1 className="text-4xl font-serif mb-4">Rewards</h1>
         <h2 className="text-lg font-semibold text-gray-800">All offers</h2>
       </div>
 

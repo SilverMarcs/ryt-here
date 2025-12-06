@@ -1,115 +1,63 @@
-import {
-  ArrowLeft,
-  Copy,
-  Shield,
-  ArrowLeftRight,
-  Lock,
-  Settings,
-  ChevronRight,
-} from "lucide-react";
+import { Shield, Check } from "lucide-react";
 import { BottomNavigation, type TabType } from "./bottom-navigation";
 
 type ProfileScreenProps = {
-  onTabChange?: (tab: TabType) => void;
+    onTabChange?: (tab: TabType) => void;
 };
 
 export const ProfileScreen = ({ onTabChange }: ProfileScreenProps) => {
-  return (
-    <div className="bg-white min-h-screen pb-20">
-      {/* Status Bar */}
-      <div className="flex items-center justify-between px-4 pt-2 pb-1">
-        <div className="flex items-center gap-1">
-          <span className="text-sm font-medium">02:37</span>
-          <div className="w-4 h-4 bg-gray-300 rounded" />
-        </div>
-        <div className="flex items-center gap-2">
-          <div className="w-4 h-4 bg-gray-300 rounded" />
-          <div className="w-4 h-4 bg-gray-300 rounded" />
-          <span className="text-xs">22</span>
-        </div>
-      </div>
-
-      {/* Header */}
-      <div className="flex items-center px-4 py-3">
-        <button>
-          <ArrowLeft className="w-6 h-6 text-gray-800" />
-        </button>
-      </div>
-
-      {/* Profile Section */}
-      <div className="flex flex-col items-center px-4 py-6">
-        <div className="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mb-3">
-          <span className="text-blue-600 font-semibold text-2xl">LT</span>
-        </div>
-        <div className="w-32 h-4 bg-gray-300 rounded mb-2" />
-        <div className="flex items-center gap-2 mb-6">
-          <a href="#" className="text-blue-600 text-sm font-medium">
-            View profile
-          </a>
-          <div className="w-1 h-1 bg-gray-400 rounded-full" />
-        </div>
-      </div>
-
-      {/* Info Cards */}
-      <div className="flex gap-4 px-4 mb-4">
-        <div className="flex-1 bg-white border border-gray-200 rounded-2xl p-4">
-          <div className="text-xs text-gray-500 mb-1">Member since</div>
-          <div className="text-sm font-medium">Dec 2025</div>
-        </div>
-        <div className="flex-1 bg-white border border-gray-200 rounded-2xl p-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <div className="text-xs text-gray-500 mb-1">
-                Your account no.
-              </div>
-              <div className="w-24 h-4 bg-gray-300 rounded" />
+    return (
+        <div className="bg-white min-h-full pb-20">
+            {/* Header */}
+            <div className="px-4 py-6">
+                <h1 className="text-4xl font-serif mb-2">Accounts</h1>
+                <p className="text-gray-600">Total balance: RM 0.00</p>
             </div>
-            <button>
-              <Copy className="w-5 h-5 text-blue-600" />
-            </button>
-          </div>
-        </div>
-      </div>
 
-      {/* Security Banner */}
-      <div className="mx-4 mb-6 bg-blue-50 rounded-2xl p-4">
-        <div className="flex items-center justify-between">
-          <p className="text-sm text-gray-800 flex-1">
-            Verify your email to keep your account extra secure.
-          </p>
-          <button className="bg-blue-600 text-white px-6 py-2 rounded-xl font-medium text-sm ml-4">
-            Verify
-          </button>
-        </div>
-      </div>
-
-      {/* Account Section */}
-      <div className="px-4">
-        <h2 className="text-lg font-semibold mb-4">Account</h2>
-        <div className="space-y-1">
-          {[
-            { icon: Shield, label: "Ryt Secure" },
-            { icon: ArrowLeftRight, label: "Accounts and limits" },
-            { icon: Lock, label: "Security" },
-            { icon: Settings, label: "General" },
-          ].map((item) => (
-            <button
-              key={item.label}
-              className="w-full flex items-center justify-between p-4 bg-white border border-gray-200 rounded-xl hover:bg-gray-50"
-            >
-              <div className="flex items-center gap-3">
-                <item.icon className="w-5 h-5 text-gray-700" />
-                <span className="text-sm font-medium text-gray-800">
-                  {item.label}
+            {/* Ready to spend section */}
+            <div className="flex items-center justify-between px-4 mb-4">
+                <span className="text-gray-800 font-medium">
+                    Ready to spend
                 </span>
-              </div>
-              <ChevronRight className="w-4 h-4 text-gray-400" />
-            </button>
-          ))}
-        </div>
-      </div>
+                <div className="flex items-center gap-2">
+                    <span className="bg-blue-100 text-blue-600 px-3 py-1 rounded-full text-sm font-medium">
+                        3.00% p.a.
+                    </span>
+                    <span className="text-gray-800 font-medium">RM 0.00</span>
+                </div>
+            </div>
 
-      <BottomNavigation activeTab="accounts" onTabChange={onTabChange} />
-    </div>
-  );
+            {/* Main Account Card */}
+            <div className="mx-4 mb-6">
+                <div className="bg-white border border-gray-200 rounded-2xl p-4 flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                        <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center">
+                            <span className="text-white font-semibold text-sm">
+                                Ryt
+                            </span>
+                        </div>
+                        <span className="text-gray-800 font-medium">
+                            Main Account
+                        </span>
+                    </div>
+                    <span className="text-gray-800 font-medium">RM 0.00</span>
+                </div>
+            </div>
+
+            {/* PIDM Protection Footer */}
+            <div className="px-4 mb-4">
+                <div className="flex items-start gap-2 mb-2">
+                    <Shield className="w-5 h-5 text-blue-600 mt-0.5" />
+                    <p className="text-xs text-gray-600 flex-1">
+                        Protected by PIDM up to RM 250,000 for each depositor
+                    </p>
+                </div>
+                <a href="#" className="text-blue-600 text-xs font-medium">
+                    *Interest rate details
+                </a>
+            </div>
+
+            <BottomNavigation activeTab="accounts" onTabChange={onTabChange} />
+        </div>
+    );
 };

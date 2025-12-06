@@ -6,20 +6,7 @@ type CardsScreenProps = {
 
 export const CardsScreen = ({ onTabChange }: CardsScreenProps) => {
   return (
-    <div className="bg-white min-h-screen pb-20">
-      {/* Status Bar */}
-      <div className="flex items-center justify-between px-4 pt-2 pb-1">
-        <div className="flex items-center gap-1">
-          <span className="text-sm font-medium">02:43</span>
-          <div className="w-4 h-4 bg-gray-300 rounded" />
-        </div>
-        <div className="flex items-center gap-2">
-          <div className="w-4 h-4 bg-gray-300 rounded" />
-          <div className="w-4 h-4 bg-gray-300 rounded" />
-          <div className="w-4 h-4 bg-gray-300 rounded" />
-          <span className="text-xs">20</span>
-        </div>
-      </div>
+    <div className="bg-white min-h-full pb-20">
 
       {/* Page Indicator */}
       <div className="flex items-center justify-center gap-2 py-4">

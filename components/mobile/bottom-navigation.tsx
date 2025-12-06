@@ -25,7 +25,7 @@ export const BottomNavigation = ({
   ];
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200">
+    <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-md bg-white border-t border-gray-200 z-50">
       <div className="flex items-center justify-around py-2">
         {tabs.map((tab) => {
           const isActive = activeTab === tab.id;

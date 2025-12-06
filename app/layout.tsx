@@ -21,7 +21,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${jakarta.variable} min-h-screen bg-background text-foreground antialiased`}>
+      <body className={`${jakarta.variable} h-screen overflow-hidden bg-background text-foreground antialiased`}>
         <ThemeProvider>{children}</ThemeProvider>
       </body>
     </html>
