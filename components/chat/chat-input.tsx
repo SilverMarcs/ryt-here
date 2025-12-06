@@ -1,5 +1,5 @@
 import { FormEvent } from "react";
-import { SendHorizonal, Paperclip } from "lucide-react";
+import { SendHorizonal, Zap } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
@@ -8,6 +8,7 @@ interface ChatInputProps {
   onChange: (value: string) => void;
   onSubmit: (event?: FormEvent<HTMLFormElement>) => void;
   disabled?: boolean;
+  onQuickActionsClick?: () => void;
 }
 
 export const ChatInput = ({
@@ -15,6 +16,7 @@ export const ChatInput = ({
   onChange,
   onSubmit,
   disabled,
+  onQuickActionsClick,
 }: ChatInputProps) => {
   return (
     <form
@@ -22,16 +24,17 @@ export const ChatInput = ({
         event.preventDefault();
         onSubmit(event);
       }}
-      className="flex items-center gap-2"
+      className="flex items-center gap-2 mx-2"
     >
       <Button
         type="button"
         size="icon"
         variant="secondary"
-        disabled
-        aria-label="Attachment placeholder"
+        onClick={onQuickActionsClick}
+        aria-label="Quick actions"
+        className="transition-all hover:scale-105 active:scale-95"
       >
-        <Paperclip className="h-4 w-4" />
+        <Zap className="h-4 w-4" />
       </Button>
       <Input
         placeholder="I am Ryt Here..."

@@ -6,6 +6,7 @@ import { useChat } from "@ai-sdk/react";
 import { Shield, Sparkles } from "lucide-react";
 import { ChatInput } from "@/components/chat/chat-input";
 import { MessagesPanel } from "@/components/chat/messages-panel";
+import { QuickActionsPopup } from "@/components/chat/quick-actions-popup";
 import { useToolOutputApplier } from "@/components/chat/hooks/use-tool-output-applier";
 import { useToolRenderers } from "@/components/chat/hooks/use-tool-renderers";
 import { useBank } from "@/contexts/bank-context";
@@ -37,6 +38,8 @@ export const ChatExperience = () => {
   const [pendingLimits, setPendingLimits] = useState<
     Record<string, number | undefined>
   >({});
+  const [showQuickActions, setShowQuickActions] = useState(false);
+  const [isResetting, setIsResetting] = useState(false);
 
   // Use ref to always get the latest state
   const stateRef = useRef(state);
@@ -81,6 +84,17 @@ export const ChatExperience = () => {
     await sendMessage({ text });
   };
 
+  const handleResetLimit = async () => {
+    setIsResetting(true);
+    await setTransactionLimit(state.user.card.defaultTransactionLimit);
+    setTimeout(() => setIsResetting(false), 500);
+  };
+
+  const handleQuickAction = async (prompt: string) => {
+    setInput("");
+    await sendMessage({ text: prompt });
+  };
+
   return (
     <div className="flex h-full flex-col gap-4 overflow-hidden">
       <div className="flex flex-1 flex-col gap-3 overflow-hidden">
@@ -106,21 +120,33 @@ export const ChatExperience = () => {
         {state.user.card.transactionLimit !== state.user.card.defaultTransactionLimit && (
           <div className="mb-2 flex items-center justify-center">
             <button
-              onClick={() => setTransactionLimit(state.user.card.defaultTransactionLimit)}
-              className="flex items-center gap-2 rounded-full border border-border bg-muted px-4 py-1.5 text-xs font-medium text-foreground transition-colors hover:bg-muted/80"
+              onClick={handleResetLimit}
+              disabled={isResetting}
+              className="flex items-center gap-2 rounded-full border border-border bg-muted px-4 py-1.5 text-xs font-medium text-foreground transition-all hover:bg-muted/80 hover:border-primary/50 active:scale-95 disabled:opacity-70"
             >
               <span>Limit changed to {state.user.currency} {state.user.card.transactionLimit}</span>
               <span className="text-muted-foreground">•</span>
-              <span className="text-primary">Reset to default</span>
+              <span className={`text-primary transition-all ${isResetting ? 'scale-95 opacity-70' : ''}`}>
+                {isResetting ? 'Resetting...' : 'Reset to default'}
+              </span>
             </button>
           </div>
         )}
-        <ChatInput
-          value={input}
-          onChange={setInput}
-          onSubmit={handleSubmit}
-          disabled={status === "streaming" || status === "submitted"}
-        />
+        <div className="relative">
+          <ChatInput
+            value={input}
+            onChange={setInput}
+            onSubmit={handleSubmit}
+            disabled={status === "streaming" || status === "submitted"}
+            onQuickActionsClick={() => setShowQuickActions(true)}
+          />
+          {showQuickActions && (
+            <QuickActionsPopup
+              onClose={() => setShowQuickActions(false)}
+              onSelectAction={handleQuickAction}
+            />
+          )}
+        </div>
       </div>
     </div>
   );
