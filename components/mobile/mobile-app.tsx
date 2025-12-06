@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { Shield } from "lucide-react";
 import { HomeScreen } from "./home-screen";
 import { InsightsScreen } from "./insights-screen";
 import { ProfileScreen } from "./profile-screen";
@@ -161,11 +162,20 @@ export function MobileApp() {
                 {/* Chat Screen */}
                 {isChatOpen && (
                     <div
-                        className="fixed inset-0 z-40 h-screen w-full dark flex items-center justify-center"
-                        style={{ height: "100dvh" }}
+                        className="fixed inset-0 z-40 w-full dark flex items-center justify-center"
+                        style={{
+                            height: "100svh",
+                            maxHeight: "100svh",
+                        }}
                     >
                         <BankProvider>
-                            <div className="h-full w-full max-w-md mx-auto overflow-hidden relative">
+                            <div
+                                className="h-full w-full max-w-md mx-auto overflow-hidden relative"
+                                style={{
+                                    height: "100svh",
+                                    maxHeight: "100svh",
+                                }}
+                            >
                                 {/* Pulsing gradient background */}
                                 <div className="absolute inset-0 ai-chat-bg opacity-100">
                                     <div className="orb orb-1" />
@@ -173,19 +183,27 @@ export function MobileApp() {
                                     <div className="orb orb-3" />
                                     <div className="orb orb-4" />
                                 </div>
-                                <div className="relative z-10 h-full flex flex-col">
+                                <div
+                                    className="relative z-10 h-full flex flex-col"
+                                    style={{
+                                        height: "100svh",
+                                        maxHeight: "100svh",
+                                    }}
+                                >
                                     <div
-                                        className={`h-full flex flex-col overflow-hidden px-4 sm:px-6 transition-opacity duration-300 ${
+                                        className={`h-full flex flex-col overflow-hidden px-4 transition-opacity duration-300 ${
                                             showChatContent
                                                 ? "opacity-100"
                                                 : "opacity-0"
                                         }`}
                                         style={{
                                             paddingTop:
-                                                "max(2rem, calc(env(safe-area-inset-top, 0px) + 1.5rem))",
+                                                "max(1rem, calc(env(safe-area-inset-top, 0px) + 1rem))",
+                                            height: "100svh",
+                                            maxHeight: "100svh",
                                         }}
                                     >
-                                        <div className="flex items-center justify-between mb-4 pt-2 shrink-0">
+                                        <div className="flex items-center justify-between mb-4 shrink-0 relative">
                                             <button
                                                 onClick={handleCloseChat}
                                                 className="flex items-center gap-2 bg-white/10 backdrop-blur-md rounded-full px-4 py-2 text-white hover:bg-white/20 transition-all border border-white/20"
@@ -207,8 +225,20 @@ export function MobileApp() {
                                                     Back
                                                 </span>
                                             </button>
+                                            <h1 className="text-lg font-semibold text-white absolute left-1/2 -translate-x-1/2">
+                                                Ryt Here
+                                            </h1>
+                                            <div className="flex items-center justify-center w-10 h-10 bg-white/10 backdrop-blur-md rounded-full border border-white/20">
+                                                <Shield className="w-5 h-5 text-white" />
+                                            </div>
                                         </div>
-                                        <div className="flex-1 min-h-0 overflow-hidden">
+                                        <div
+                                            className="flex-1 min-h-0 overflow-hidden"
+                                            style={{
+                                                maxHeight:
+                                                    "calc(100svh - 12rem)",
+                                            }}
+                                        >
                                             <ChatExperience />
                                         </div>
                                     </div>
