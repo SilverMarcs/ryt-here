@@ -2,6 +2,7 @@ import { FormEvent } from "react";
 import { SendHorizonal } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import type { RefObject } from "react";
 
 interface ChatInputProps {
     value: string;
@@ -9,6 +10,7 @@ interface ChatInputProps {
     onSubmit: (event?: FormEvent<HTMLFormElement>) => void;
     disabled?: boolean;
     onQuickActionsClick?: () => void;
+    inputRef?: RefObject<HTMLInputElement | null>;
 }
 
 export const ChatInput = ({
@@ -17,6 +19,7 @@ export const ChatInput = ({
     onSubmit,
     disabled,
     onQuickActionsClick,
+    inputRef,
 }: ChatInputProps) => {
     return (
         <form
@@ -27,6 +30,7 @@ export const ChatInput = ({
             className="flex items-center gap-2.5 w-full"
         >
             <Input
+                ref={inputRef}
                 placeholder="I am Ryt Here..."
                 value={value}
                 onChange={(event) => onChange(event.target.value)}

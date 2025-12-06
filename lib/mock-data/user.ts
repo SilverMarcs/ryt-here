@@ -2,7 +2,7 @@ import type { UserProfile } from "@/types/bank";
 
 export const mockUser: UserProfile = {
   id: "usr_001",
-  name: "Ali Bin Ahmad",
+  name: "John Doe",
   accountNumber: "1234-5678-9012",
   balance: 25420.5,
   currency: "MYR",

@@ -4,7 +4,7 @@ export const mockMoneyRequests: MoneyRequest[] = [
   {
     id: "req_001",
     requesterId: "usr_001",
-    requesterName: "Ali Bin Ahmad",
+    requesterName: "John Doe",
     recipientName: "Sarah",
     amount: 45,
     note: "Dinner share",
