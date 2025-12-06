@@ -3,30 +3,34 @@ import { z } from "zod";
 import { sortTransactions } from "@/lib/bank";
 import type { QueryTransactionsOutput } from "@/types/chat";
 import type { BankToolContext } from "./bank-tool-context";
+import type { Transaction } from "@/types/bank";
 
 export const buildQueryTransactionsTool = (ctx: BankToolContext) =>
   tool({
-    description: `Query all user transactions for intelligent analysis and insights.
+    description: `Query and filter user transactions for intelligent analysis and display.
 
-USE THIS TOOL WHEN the user asks questions that require analyzing their full transaction history, such as:
-- Spending predictions: "How much will I likely spend next month?"
-- Subscription analysis: "Which subscriptions had a price increase?"
-- Pattern detection: "What are my recurring expenses?"
-- Historical comparisons: "Am I spending more on food this month vs last month?"
-- Trend identification: "What's my spending trend over the past 3 months?"
-- Anomaly detection: "Any unusual transactions recently?"
-- Category insights: "What percentage of my income goes to entertainment?"
+USE THIS TOOL WHEN the user asks to see or analyze specific types of transactions, such as:
+- Subscription analysis: "Show my subscriptions" or "Which subscriptions had a price increase?"
+- Category filtering: "Show my food expenses" or "What did I spend on entertainment?"
+- Pattern detection: "Show my recurring expenses"
+- Historical comparisons: "Show shopping transactions from last month"
+- Specific vendor/merchant: "Show all Spotify transactions"
+
+This tool will:
+1. Filter transactions based on keywords, categories, and patterns
+2. Display them in a nice scrollable list UI
+3. Allow the AI to analyze patterns and provide insights
 
 DO NOT use this tool for:
 - Simple "show my recent transactions" requests (use get_recent_transactions instead)
-- Specific spending analysis with charts (use analyze_spending instead)
+- Creating spending charts (use analyze_spending instead)
 
-IMPORTANT: After receiving the transactions from this tool, you MUST analyze them and provide a thoughtful response to the user's question. The tool provides raw data - your job is to interpret it and answer their question with specific numbers and insights.`,
+IMPORTANT: After receiving the filtered transactions, you can provide additional analysis and insights in your text response if helpful.`,
     inputSchema: z.object({
       query: z
         .string()
         .describe(
-          "A brief description of what the user is trying to understand from their transactions"
+          "A brief description of what transactions to find (e.g., 'subscriptions', 'food expenses', 'Spotify')"
         ),
       monthsBack: z
         .number()
@@ -44,9 +48,49 @@ IMPORTANT: After receiving the transactions from this tool, you MUST analyze the
       const cutoffDate = new Date();
       cutoffDate.setMonth(cutoffDate.getMonth() - monthsBack);
 
-      const filteredTransactions = transactions.filter(
+      let filteredTransactions = transactions.filter(
         (txn) => new Date(txn.date) >= cutoffDate
       );
+
+      // Apply smart filtering based on query
+      const queryLower = query.toLowerCase();
+      
+      // Filter by category keywords
+      const categoryKeywords: Record<string, string[]> = {
+        subscription: ['netflix', 'spotify', 'prime', 'subscription', 'youtube', 'apple music', 'disney+'],
+        food: ['restaurant', 'cafe', 'food', 'dining', 'starbucks', 'mcdonald'],
+        shopping: ['amazon', 'shop', 'store', 'mall', 'retail'],
+        transport: ['uber', 'grab', 'transport', 'taxi', 'parking', 'fuel', 'gas'],
+        entertainment: ['cinema', 'movie', 'game', 'entertainment', 'theatre'],
+      };
+      
+      // Check if query matches any category keywords
+      let matchedCategory: string | null = null;
+      for (const [category, keywords] of Object.entries(categoryKeywords)) {
+        if (keywords.some(kw => queryLower.includes(kw))) {
+          matchedCategory = category;
+          filteredTransactions = filteredTransactions.filter((txn: Transaction) => {
+            const desc = txn.description.toLowerCase();
+            return keywords.some(kw => desc.includes(kw)) || txn.category === category;
+          });
+          break;
+        }
+      }
+      
+      // If no category match, try to match specific merchant/description
+      if (!matchedCategory && queryLower.length > 3) {
+        // Extract potential search terms (remove common words)
+        const searchTerms = queryLower
+          .split(/\s+/)
+          .filter(word => !['show', 'my', 'the', 'all', 'from', 'to', 'for', 'in', 'on', 'at'].includes(word));
+        
+        if (searchTerms.length > 0) {
+          filteredTransactions = filteredTransactions.filter((txn: Transaction) => {
+            const desc = txn.description.toLowerCase();
+            return searchTerms.some(term => desc.includes(term));
+          });
+        }
+      }
 
       const result: QueryTransactionsOutput = {
         query,

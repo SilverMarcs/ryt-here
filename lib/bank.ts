@@ -184,6 +184,12 @@ export const performTransfer = (
   { recipientName, amount, note }: TransferIntent,
 ): TransferOutcome => {
   const contact = findContactByName(state, recipientName);
+  
+  // Validate sufficient balance
+  if (amount > state.user.balance) {
+    throw new Error(`Insufficient balance. Available: ${formatCurrency(state.user.balance, state.user.currency)}, Required: ${formatCurrency(amount, state.user.currency)}`);
+  }
+  
   const now = new Date();
   const reference = `TXN-${now.getFullYear()}${(now.getMonth() + 1)
     .toString()

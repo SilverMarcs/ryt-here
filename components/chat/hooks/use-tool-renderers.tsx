@@ -159,6 +159,17 @@ export const useToolRenderers = ({
               newLimit: output.newLimit!,
               currentLimit: output.currentLimit!,
             }}
+            onComplete={async () => {
+              // After countdown completes, transition to needs_confirmation
+              await addToolOutput({
+                tool: "transfer_money",
+                toolCallId: part.toolCallId,
+                output: {
+                  ...output,
+                  status: "needs_confirmation",
+                },
+              });
+            }}
           />
         );
       }
@@ -223,8 +234,13 @@ export const useToolRenderers = ({
       }
 
       return (
-        <div className="rounded-xl bg-muted px-3 py-2 text-xs text-muted-foreground">
-          Transfer cancelled.
+        <div className="rounded-xl bg-destructive/10 border border-destructive/30 px-3 py-2.5 text-xs">
+          <p className="font-semibold text-destructive">Transfer cancelled</p>
+          <p className="text-muted-foreground mt-0.5">
+            {output.canProceed === false 
+              ? "Insufficient balance or recipient not found." 
+              : "Transfer was cancelled."}
+          </p>
         </div>
       );
   };
@@ -480,7 +496,42 @@ export const useToolRenderers = ({
         );
       }
       const output = part.output as QueryTransactionsOutput;
-      // Show a minimal indicator that data was retrieved - the assistant's response will follow
+      
+      // Render as a transaction list if there are transactions
+      if (output.transactions && output.transactions.length > 0) {
+        // Extract a meaningful title from the query
+        const queryLower = output.query.toLowerCase();
+        let title = output.query;
+        
+        // Try to extract category or meaningful title from query
+        if (queryLower.includes('subscription')) {
+          title = 'Subscriptions';
+        } else if (queryLower.includes('food') || queryLower.includes('dining')) {
+          title = 'Food & Dining';
+        } else if (queryLower.includes('shopping')) {
+          title = 'Shopping';
+        } else if (queryLower.includes('transport')) {
+          title = 'Transportation';
+        } else if (queryLower.includes('entertainment')) {
+          title = 'Entertainment';
+        } else if (queryLower.includes('recurring')) {
+          title = 'Recurring Expenses';
+        } else if (queryLower.includes('recent')) {
+          title = 'Recent Transactions';
+        } else {
+          title = 'Filtered Transactions';
+        }
+        
+        return (
+          <TransactionList
+            title={title}
+            transactions={output.transactions}
+            currency={output.currency}
+          />
+        );
+      }
+      
+      // Fallback: Show minimal indicator that data was retrieved
       return (
         <div className="flex items-center gap-2 text-xs text-muted-foreground py-1.5 px-3 bg-muted/50 rounded-lg w-fit">
           <svg
@@ -588,6 +639,7 @@ export const useToolRenderers = ({
         "tool-request_money",
         "tool-get_account_statement",
         "tool-manage_savings_goal",
+        "tool-query_transactions", // Now a visual tool
       ];
       
       const hasVisualToolContent =
@@ -603,12 +655,8 @@ export const useToolRenderers = ({
           part.type === "text" && Boolean((part.text ?? "").trim()),
       );
 
-      // Check if the message only has query_transactions tool (which expects text follow-up)
-      const hasQueryTransactionsTool = message.parts.some(
-        (part: BankMessagePart) => part.type === "tool-query_transactions",
-      );
-      const isAwaitingAnalysis =
-        role === "assistant" && hasQueryTransactionsTool && !hasTextContent;
+      // No longer need special handling for query_transactions
+      const isAwaitingAnalysis = false;
 
       const visibleParts = message.parts
         .filter((part: BankMessagePart) => isRenderablePart(part, hasVisualToolContent, role))

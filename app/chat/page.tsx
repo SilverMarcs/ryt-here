@@ -2,6 +2,9 @@ import { ChatContainer } from "@/components/chat/chat-container";
 import { ChatExperience } from "@/components/chat/chat-experience";
 import { BankProvider } from "@/contexts/bank-context";
 
+// Disable caching to ensure fresh state on every page load
+export const dynamic = 'force-dynamic';
+
 export default function ChatPage() {
   return (
     <BankProvider>

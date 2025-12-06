@@ -8,7 +8,7 @@ import { calculateUsedToday } from "./bank-tool-helpers";
 export const buildTransferMoneyTool = (ctx: BankToolContext) =>
   tool({
     description:
-      "Prepare a transfer to a saved contact. ALWAYS check if the transfer amount exceeds the current transaction limit before proceeding.",
+      "Prepare a transfer to a saved contact. ALWAYS check if the transfer amount exceeds the current transaction limit AND if the user has sufficient balance before proceeding.",
     inputSchema: z.object({
       recipientName: z.string().min(1),
       amount: z.number().positive(),
@@ -21,6 +21,21 @@ export const buildTransferMoneyTool = (ctx: BankToolContext) =>
       const reference = `PENDING-${now.getTime().toString().slice(-6)}`;
       const currentLimit = state.user.card.transactionLimit;
       const usedToday = calculateUsedToday(state);
+      
+      // Check if user has sufficient balance
+      if (amount > state.user.balance) {
+        const result: TransferToolOutput = {
+          status: "cancelled",
+          recipientName,
+          amount,
+          currency: state.user.currency,
+          note,
+          contact,
+          canProceed: false,
+          reference,
+        };
+        return result;
+      }
       
       // Check if amount exceeds current limit
       if (amount > currentLimit) {

@@ -69,9 +69,14 @@ export const TransferConfirmation = ({
         </div>
 
         {data.canProceed === false ? (
-          <div className="flex items-start gap-2 rounded-xl bg-muted px-3 py-2 text-xs">
-            <AlertCircle className="mt-0.5 h-4 w-4" />
-            Recipient not found in saved contacts.
+          <div className="flex items-start gap-2 rounded-xl bg-destructive/10 border border-destructive/30 px-3 py-2.5 text-xs">
+            <AlertCircle className="mt-0.5 h-4 w-4 text-destructive" />
+            <div>
+              <p className="font-semibold text-destructive">Cannot proceed</p>
+              <p className="text-muted-foreground mt-0.5">
+                Recipient not found in saved contacts or insufficient balance.
+              </p>
+            </div>
           </div>
         ) : null}
 
@@ -140,7 +145,7 @@ export const TransferLimitExceeded = ({
         pendingLimit={data.pendingLimit}
         onChange={onLimitChange}
         onConfirm={onConfirmLimit}
-        confirmLabel="Increase Limit & Continue"
+        confirmLabel="Change limit"
       />
     </div>
   );
@@ -148,8 +153,10 @@ export const TransferLimitExceeded = ({
 
 export const TransferLimitIncreaseWaiting = ({
   data,
+  onComplete,
 }: {
   data: TransferConfirmationData & { newLimit: number; currentLimit: number };
+  onComplete?: () => void;
 }) => {
   return (
     <LimitUpdateSuccess
@@ -160,6 +167,7 @@ export const TransferLimitIncreaseWaiting = ({
         recipientName: data.contact?.name ?? data.recipientName,
         amount: data.amount,
       }}
+      onComplete={onComplete}
     />
   );
 };
@@ -169,6 +177,7 @@ const LimitUpdateSuccess = ({
   next,
   currency,
   transferInfo,
+  onComplete,
 }: {
   previous: number;
   next: number;
@@ -177,14 +186,19 @@ const LimitUpdateSuccess = ({
     recipientName: string;
     amount: number;
   };
+  onComplete?: () => void;
 }) => {
   const [countdown, setCountdown] = React.useState(10);
 
   React.useEffect(() => {
-    if (countdown <= 0) return;
+    if (countdown <= 0) {
+      // Notify parent that countdown is complete
+      onComplete?.();
+      return;
+    }
     const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
     return () => clearTimeout(timer);
-  }, [countdown]);
+  }, [countdown, onComplete]);
 
   return (
     <Card className="border-blue-500/30">
@@ -195,7 +209,7 @@ const LimitUpdateSuccess = ({
           </div>
           <div className="flex-1">
             <p className="text-xs uppercase text-muted-foreground">Limit Updated</p>
-            <p className="text-lg font-semibold">Processing...</p>
+            <p className="text-lg font-semibold">Processing</p>
           </div>
         </div>
       </CardHeader>
@@ -215,7 +229,7 @@ const LimitUpdateSuccess = ({
           </div>
         </div>
 
-        {transferInfo && (
+        {/* {transferInfo && (
           <div className="rounded-lg bg-muted/50 px-3 py-2.5 text-xs">
             <p className="font-medium text-foreground mb-1">Pending Transfer</p>
             <div className="flex items-center justify-between text-muted-foreground">
@@ -225,11 +239,11 @@ const LimitUpdateSuccess = ({
               </span>
             </div>
           </div>
-        )}
+        )} */}
 
         <div className="rounded-lg bg-orange-500/10 border border-orange-500/30 px-3 py-2.5 text-xs">
           <p className="font-medium text-orange-600 dark:text-orange-400 mb-1">
-            {countdown > 0 ? `Processing... ${countdown}s` : 'Limit updated!'}
+            {countdown > 0 ? `Processing ${countdown}s` : 'Limit updated!'}
           </p>
           <p className="text-muted-foreground">
             {countdown > 0

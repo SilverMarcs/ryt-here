@@ -45,7 +45,7 @@ export const TransferReceipt = ({ data }: { data: TransferReceiptData }) => {
         </div>
       </CardHeader>
       <CardContent>
-        <div className="rounded-xl bg-muted/40 p-3">
+        <div className="rounded-xl bg-muted/40 p-3 ">
           <p className="text-sm text-muted-foreground">Amount</p>
           <p className="text-lg font-semibold">
             <AmountDisplay
@@ -54,14 +54,14 @@ export const TransferReceipt = ({ data }: { data: TransferReceiptData }) => {
               emphasize
             />
           </p>
-          {data.note ? (
+          {/* {data.note ? (
             <p className="mt-2 rounded-lg bg-card/90 px-3 py-2 text-xs">
               Note: {data.note}
             </p>
-          ) : null}
+          ) : null} */}
         </div>
-        <div className="rounded-xl bg-card px-2 py-3 text-sm pt-4">
-          <div className="flex items-center justify-between mt-2">
+        <div className="rounded-xl bg-card px-2 py-3 text-sm mt-2">
+          <div className="flex items-center justify-between p-2">
             <span className="text-muted-foreground">Reference</span>
             <button
               type="button"
