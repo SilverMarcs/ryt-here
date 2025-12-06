@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Shield } from "lucide-react";
 import { HomeScreen } from "./home-screen";
 import { InsightsScreen } from "./insights-screen";
@@ -12,6 +12,7 @@ import { ChatContainer } from "@/components/chat/chat-container";
 import { ChatExperience } from "@/components/chat/chat-experience";
 import { BankProvider } from "@/contexts/bank-context";
 import { UserProfileScreen } from "./user-profile-screen";
+import { TutorialOverlay } from "./tutorial-overlay";
 
 type TransitionState = {
     isActive: boolean;
@@ -28,6 +29,7 @@ export function MobileApp() {
     const [transitionState, setTransitionState] =
         useState<TransitionState | null>(null);
     const [showChatContent, setShowChatContent] = useState(false);
+    const [showTutorial, setShowTutorial] = useState(true);
 
     const handleTabChange = (tab: TabType) => {
         setActiveTab(tab);
@@ -92,7 +94,7 @@ export function MobileApp() {
                 return (
                     <HomeScreen
                         onTabChange={handleTabChange}
-                        onOpenChat={handleOpenChatWithRef}
+                        onOpenChat={handleOpenChatWithTutorialDismiss}
                         onOpenProfile={handleOpenProfile}
                     />
                 );
@@ -117,12 +119,29 @@ export function MobileApp() {
 
     const mobileContainerRef = React.useRef<HTMLDivElement>(null);
 
+    const handleDismissTutorial = () => {
+        setShowTutorial(false);
+    };
+
+    const handleOpenChatWithTutorialDismiss = (buttonRect: DOMRect) => {
+        setShowTutorial(false);
+        handleOpenChatWithRef(buttonRect);
+    };
+
     return (
         <div className="bg-muted h-screen overflow-hidden relative">
             <div
                 ref={mobileContainerRef}
                 className="max-w-md mx-auto bg-background shadow-2xl h-full overflow-y-auto overflow-x-hidden relative"
             >
+                {/* Tutorial Overlay */}
+                {showTutorial && activeTab === "home" && !isChatOpen && (
+                    <TutorialOverlay
+                        isVisible={showTutorial}
+                        onDismiss={handleDismissTutorial}
+                    />
+                )}
+
                 {/* Home Screen */}
                 <div
                     className={`transition-opacity duration-300 ${
