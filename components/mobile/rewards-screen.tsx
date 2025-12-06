@@ -1,0 +1,120 @@
+import { BottomNavigation, type TabType } from "./bottom-navigation";
+
+type RewardsScreenProps = {
+  onTabChange?: (tab: TabType) => void;
+};
+
+type RewardCardProps = {
+  bgColor: string;
+  title: string;
+  illustration?: React.ReactNode;
+  image?: string;
+};
+
+const RewardCard = ({
+  bgColor,
+  title,
+  illustration,
+  image,
+}: RewardCardProps) => {
+  return (
+    <div
+      className={`${bgColor} rounded-2xl p-4 aspect-square flex flex-col`}
+    >
+      {illustration && (
+        <div className="flex-1 flex items-center justify-center mb-2">
+          {illustration}
+        </div>
+      )}
+      {image && (
+        <div className="flex-1 bg-gray-200 rounded-lg mb-2 flex items-center justify-center">
+          <span className="text-xs text-gray-500">Image</span>
+        </div>
+      )}
+      <p className="text-xs font-medium text-gray-800 line-clamp-2">{title}</p>
+    </div>
+  );
+};
+
+export const RewardsScreen = ({ onTabChange }: RewardsScreenProps) => {
+  const rewards = [
+    {
+      bgColor: "bg-green-50",
+      title: "Boost up to 4% p.a., paid daily",
+      illustration: (
+        <div className="w-16 h-16 flex items-center justify-center">
+          <div className="text-blue-600 text-2xl">🚀</div>
+        </div>
+      ),
+    },
+    {
+      bgColor: "bg-pink-50",
+      title: "Snap and pay via Ryt AI, get up to R...",
+      illustration: (
+        <div className="w-16 h-16 flex items-center justify-center">
+          <div className="text-blue-600 text-2xl">📱</div>
+        </div>
+      ),
+    },
+    {
+      bgColor: "bg-white border border-gray-200",
+      title: "Get up to RM 12 cashback with Ry...",
+      image: "ryt-payment",
+    },
+    {
+      bgColor: "bg-yellow-50",
+      title: "Earn 1.2% unlimited cashback overse...",
+      illustration: (
+        <div className="w-16 h-16 flex items-center justify-center">
+          <div className="text-blue-600 text-2xl">🌴</div>
+        </div>
+      ),
+    },
+    {
+      bgColor: "bg-green-50",
+      title: "Free upsize at Koppiku",
+      illustration: (
+        <div className="w-16 h-16 flex items-center justify-center">
+          <div className="text-blue-600 text-2xl">☕</div>
+        </div>
+      ),
+    },
+    {
+      bgColor: "bg-white border border-gray-200",
+      title: "20% off at Kami Hair Salon",
+      image: "kami-salon",
+    },
+  ];
+
+  return (
+    <div className="bg-white min-h-screen pb-20">
+      {/* Status Bar */}
+      <div className="flex items-center justify-between px-4 pt-2 pb-1">
+        <div className="flex items-center gap-1">
+          <span className="text-sm font-medium">02:37</span>
+          <div className="w-4 h-4 bg-gray-300 rounded" />
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="w-4 h-4 bg-gray-300 rounded" />
+          <div className="w-4 h-4 bg-gray-300 rounded" />
+          <span className="text-xs">21</span>
+        </div>
+      </div>
+
+      {/* Header */}
+      <div className="px-4 py-6">
+        <h1 className="text-3xl font-bold mb-4">Rewards</h1>
+        <h2 className="text-lg font-semibold text-gray-800">All offers</h2>
+      </div>
+
+      {/* Rewards Grid */}
+      <div className="grid grid-cols-2 gap-4 px-4">
+        {rewards.map((reward, index) => (
+          <RewardCard key={index} {...reward} />
+        ))}
+      </div>
+
+      <BottomNavigation activeTab="rewards" onTabChange={onTabChange} />
+    </div>
+  );
+};
