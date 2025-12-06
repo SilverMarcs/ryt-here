@@ -495,7 +495,7 @@ export const useToolRenderers = ({
           return (
             <ReactMarkdown
               key={`${messageId}-${part.type}-${(part.text ?? "").slice(0, 8)}`}
-              className="whitespace-pre-wrap"
+              className="prose-chat"
             >
               {part.text ?? ""}
             </ReactMarkdown>
