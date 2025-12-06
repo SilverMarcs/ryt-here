@@ -155,6 +155,7 @@ export const ChatExperience = () => {
         setPendingLimits,
         setCardStatus,
         setTransactionLimit,
+        setState,
         contributeToGoal,
     });
 

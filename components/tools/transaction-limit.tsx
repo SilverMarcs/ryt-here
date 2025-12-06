@@ -142,7 +142,7 @@ export const LimitUpdateSuccess = ({
   currency: string;
   onClose?: () => void;
 }) => {
-  const [countdown, setCountdown] = useState(10);
+  const [countdown, setCountdown] = useState(5);
 
   useEffect(() => {
     if (countdown <= 0) return;

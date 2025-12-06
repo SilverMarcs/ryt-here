@@ -188,7 +188,7 @@ const LimitUpdateSuccess = ({
   };
   onComplete?: () => void;
 }) => {
-  const [countdown, setCountdown] = React.useState(10);
+  const [countdown, setCountdown] = React.useState(5);
 
   React.useEffect(() => {
     if (countdown <= 0) {

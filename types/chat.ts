@@ -118,3 +118,10 @@ export type QueryTransactionsOutput = {
     to: string;
   };
 };
+
+// Add Contact Tool Output
+export type AddContactOutput = {
+  status: "needs_confirmation" | "confirmed" | "cancelled";
+  contact: Contact;
+  message?: string;
+};

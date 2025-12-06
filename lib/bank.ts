@@ -466,3 +466,37 @@ export const getSavingsGoalProgress = (goal: SavingsGoal) => {
   const remaining = Math.max(goal.targetAmount - goal.currentAmount, 0);
   return { progress, remaining };
 };
+
+export const nextContactId = (contacts: Contact[]) => {
+  const maxId = contacts.reduce((max, contact) => {
+    const numeric = Number(contact.id.replace(/\D/g, ""));
+    return Number.isNaN(numeric) ? max : Math.max(max, numeric);
+  }, 0);
+  const next = (maxId + 1).toString().padStart(3, "0");
+  return `contact_${next}`;
+};
+
+export interface AddContactIntent {
+  name: string;
+  email: string;
+}
+
+export const addNewContact = (
+  state: BankState,
+  { name, email }: AddContactIntent,
+): { newState: BankState; contact: Contact } => {
+  const contact: Contact = {
+    id: nextContactId(state.contacts),
+    name,
+    accountNumber: email,
+    bank: "Email",
+  };
+
+  return {
+    newState: {
+      ...state,
+      contacts: [contact, ...state.contacts],
+    },
+    contact,
+  };
+};
