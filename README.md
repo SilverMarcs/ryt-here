@@ -50,6 +50,16 @@ Ryt Here is a conversational banking experience that combines modern digital ban
 
 ## Getting Started
 
+Environment keys:
+
+Put a valid 
+
+```
+ANTHROPIC_API_KEY="sk-ant..."
+```
+
+in `.env.local` for the chat ai to work
+
 Install dependencies:
 
 ```bash
