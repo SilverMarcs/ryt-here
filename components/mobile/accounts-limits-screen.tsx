@@ -7,13 +7,15 @@ import {
     ChevronRight,
 } from "lucide-react";
 import { TransactionLimitControl } from "@/components/tools/transaction-limit";
+import { AccountStatement } from "@/components/tools/account-statement";
 import { useBank } from "@/contexts/bank-context";
+import { buildStatement, sortTransactions } from "@/lib/bank";
 
 type AccountsLimitsScreenProps = {
     onClose?: () => void;
 };
 
-type SubScreen = null | "transaction-limits";
+type SubScreen = null | "transaction-limits" | "account-statements";
 
 export const AccountsLimitsScreen = ({ onClose }: AccountsLimitsScreenProps) => {
     const { state, setTransactionLimit } = useBank();
@@ -21,6 +23,56 @@ export const AccountsLimitsScreen = ({ onClose }: AccountsLimitsScreenProps) => 
     const [pendingLimit, setPendingLimit] = useState<number | undefined>(
         state.user.card.transactionLimit
     );
+
+    if (subScreen === "account-statements") {
+        const now = new Date();
+        const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+        const startDate = thirtyDaysAgo.toISOString().split("T")[0];
+        const endDate = now.toISOString().split("T")[0];
+
+        const statement = buildStatement(state, startDate, endDate);
+
+        // Filter transactions within the date range
+        const startTs = new Date(startDate).getTime();
+        const endTs = new Date(endDate).getTime();
+        const filtered = state.transactions.filter((txn) => {
+            const txnTs = new Date(txn.date).getTime();
+            return txnTs >= startTs && txnTs <= endTs;
+        });
+
+        const sortedTransactions = sortTransactions(filtered);
+
+        return (
+            <div className="bg-background min-h-full pb-20">
+                {/* Header */}
+                <div className="flex items-center gap-3 px-4 py-3">
+                    <button onClick={() => setSubScreen(null)}>
+                        <ArrowLeft className="w-6 h-6 text-foreground" />
+                    </button>
+                    <h1 className="text-lg font-semibold text-foreground">
+                        Account Statements
+                    </h1>
+                </div>
+
+                {/* Account Statement */}
+                <div className="p-4">
+                    <AccountStatement
+                        startDate={startDate}
+                        endDate={endDate}
+                        periodLabel="Last 30 days"
+                        openingBalance={statement.openingBalance}
+                        closingBalance={statement.closingBalance}
+                        totalCredits={statement.totalCredits}
+                        totalDebits={statement.totalDebits}
+                        transactions={sortedTransactions}
+                        currency={state.user.currency}
+                        accountNumber={state.user.accountNumber}
+                        accountHolder={state.user.name}
+                    />
+                </div>
+            </div>
+        );
+    }
 
     if (subScreen === "transaction-limits") {
         return (
@@ -76,6 +128,7 @@ export const AccountsLimitsScreen = ({ onClose }: AccountsLimitsScreenProps) => 
                             icon: FileText,
                             label: "View account statements",
                             description: "Download and view your account statements",
+                            action: "account-statements" as const,
                         },
                         {
                             icon: Zap,
