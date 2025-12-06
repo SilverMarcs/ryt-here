@@ -2,113 +2,178 @@ import { ChevronDown } from "lucide-react";
 import { BottomNavigation, type TabType } from "./bottom-navigation";
 
 type InsightsScreenProps = {
-  onTabChange?: (tab: TabType) => void;
+    onTabChange?: (tab: TabType) => void;
 };
 
 type InsightCardProps = {
-  title: string;
-  amount: string;
-  hasChart?: boolean;
-  placeholder?: string;
+    title: string;
+    amount?: string;
+    detail?: string;
+    chartData?: number[];
 };
 
 const InsightCard = ({
-  title,
-  amount,
-  hasChart,
-  placeholder,
+    title,
+    amount,
+    detail,
+    chartData,
 }: InsightCardProps) => {
-  return (
-    <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
-      <div className="text-sm text-gray-600 mb-2">{title}</div>
-      {placeholder ? (
-        <div className="mb-4">
-          <p className="text-xs text-gray-500 mb-3">{placeholder}</p>
-          <div className="flex gap-2">
-            {[1, 2, 3].map((i) => (
-              <div
-                key={i}
-                className="w-8 h-8 border-2 border-dashed border-gray-300 rounded-full"
-              />
-            ))}
-          </div>
+    return (
+        <div className="bg-card rounded-2xl p-4 shadow-sm border border-border">
+            <div className="text-sm text-muted-foreground mb-2">{title}</div>
+            {amount ? (
+                <div className="text-2xl font-bold text-foreground mb-1">
+                    {amount}
+                </div>
+            ) : null}
+            {detail ? (
+                <p className="text-sm text-foreground mb-3">{detail}</p>
+            ) : null}
+            {chartData && chartData.length ? (
+                <div className="flex items-end gap-1 h-12">
+                    {chartData.map((value, index) => (
+                        <div
+                            key={`${title}-${index}`}
+                            className="flex-1 bg-muted rounded-t"
+                            style={{ height: `${value}%` }}
+                        />
+                    ))}
+                </div>
+            ) : null}
         </div>
-      ) : (
-        <>
-          <div className="text-2xl font-bold mb-3">{amount}</div>
-          {hasChart && (
-            <div className="flex items-end gap-1 h-12">
-              {[1, 2, 3, 4, 5, 6, 7].map((i) => (
-                <div
-                  key={i}
-                  className="flex-1 bg-gray-200 rounded-t"
-                  style={{
-                    height: `${Math.random() * 30 + 10}%`,
-                  }}
-                />
-              ))}
-            </div>
-          )}
-        </>
-      )}
-    </div>
-  );
+    );
 };
 
 export const InsightsScreen = ({ onTabChange }: InsightsScreenProps) => {
-  return (
-    <div className="bg-white min-h-screen pb-20">
-      {/* Status Bar */}
-      <div className="flex items-center justify-between px-4 pt-2 pb-1">
-        <div className="flex items-center gap-1">
-          <span className="text-sm font-medium">02:37</span>
-          <div className="w-4 h-4 bg-gray-300 rounded" />
-        </div>
-        <div className="flex items-center gap-2">
-          <div className="w-4 h-4 bg-gray-300 rounded" />
-          <div className="w-4 h-4 bg-gray-300 rounded" />
-          <span className="text-xs">22</span>
-        </div>
-      </div>
+    const periodLabel = "1 Dec - 7 Dec";
+    const incomeAmount = "RM 8,240.00";
+    const spendAmount = "RM 5,430.75";
+    const interestAmount = "RM 42.18";
+    const topCategory = "Dining • RM 1,120.00";
 
-      {/* Header */}
-      <div className="px-4 py-6">
-        <h1 className="text-4xl font-serif mb-4">Insights</h1>
-        <div className="flex items-center gap-3">
-          <button className="flex items-center gap-2 bg-gray-100 px-4 py-2 rounded-full">
-            <span className="text-sm font-medium">This week</span>
-            <ChevronDown className="w-4 h-4" />
-          </button>
-          <span className="text-sm text-gray-600">1 Dec - 7 Dec</span>
-        </div>
-      </div>
+    const spendingBreakdown = [
+        { label: "Dining", amount: "RM 1,120.00", percent: 32 },
+        { label: "Groceries", amount: "RM 890.40", percent: 25 },
+        { label: "Transport", amount: "RM 540.30", percent: 16 },
+        { label: "Shopping", amount: "RM 720.05", percent: 21 },
+        { label: "Bills", amount: "RM 160.00", percent: 6 },
+    ];
 
-      {/* Insights Grid */}
-      <div className="grid grid-cols-2 gap-4 px-4 mb-4">
-        <InsightCard title="Income" amount="RM 0.00" hasChart />
-        <InsightCard title="Spend" amount="RM 0.00" hasChart />
-        <InsightCard title="Interest earned" amount="RM 0.00" hasChart />
-        <InsightCard
-          title="Top category"
-          amount=""
-          placeholder="Spend to reveal your top category."
-        />
-      </div>
+    const recentTransactions = [
+        { label: "Grab ride", note: "Transport", amount: "- RM 18.50" },
+        { label: "Family Mart", note: "Groceries", amount: "- RM 42.10" },
+        { label: "Salary", note: "Income", amount: "+ RM 8,240.00" },
+    ];
 
-      {/* Spending Section */}
-      <div className="px-4 mb-4">
-        <div className="flex items-center justify-between mb-3">
-          <h2 className="text-lg font-semibold">Spending breakdown</h2>
-          <button className="text-blue-600 text-sm font-medium">See all</button>
-        </div>
-        <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
-          <p className="text-sm text-gray-500 text-center py-8">
-            No spending yet this week
-          </p>
-        </div>
-      </div>
+    return (
+        <div className="bg-background min-h-full pb-24 safe-area-inset-bottom">
+            {/* Header */}
+            <div className="px-4 py-6">
+                <h1 className="text-4xl font-serif text-foreground mb-4">
+                    Insights
+                </h1>
+                <div className="flex items-center gap-3">
+                    <button className="flex items-center gap-2 bg-muted px-4 py-2 rounded-full">
+                        <span className="text-sm font-medium text-foreground">
+                            This week
+                        </span>
+                        <ChevronDown className="w-4 h-4 text-foreground" />
+                    </button>
+                    <span className="text-sm text-muted-foreground">
+                        {periodLabel}
+                    </span>
+                </div>
+            </div>
 
-      <BottomNavigation activeTab="insights" onTabChange={onTabChange} />
-    </div>
-  );
+            {/* Insights Grid */}
+            <div className="grid grid-cols-2 gap-4 px-4 mb-4">
+                <InsightCard
+                    title="Income"
+                    amount={incomeAmount}
+                    chartData={[50, 72, 68, 80, 55, 64, 78]}
+                />
+                <InsightCard
+                    title="Spend"
+                    amount={spendAmount}
+                    chartData={[65, 58, 62, 70, 60, 66, 68]}
+                />
+                <InsightCard
+                    title="Interest earned"
+                    amount={interestAmount}
+                    chartData={[10, 12, 13, 11, 9, 10, 12]}
+                />
+                <InsightCard title="Top category" amount={topCategory} />
+            </div>
+
+            {/* Spending Section */}
+            <div className="px-4 mb-4">
+                <div className="flex items-center justify-between mb-3">
+                    <h2 className="text-lg font-semibold text-foreground">
+                        Spending breakdown
+                    </h2>
+                    <button className="text-blue-600 dark:text-blue-400 text-sm font-medium">
+                        See all
+                    </button>
+                </div>
+                <div className="bg-card rounded-2xl p-4 shadow-sm border border-border">
+                    <div className="space-y-3">
+                        {spendingBreakdown.map((item) => (
+                            <div key={item.label}>
+                                <div className="flex items-center justify-between mb-1">
+                                    <span className="text-sm font-medium text-foreground">
+                                        {item.label}
+                                    </span>
+                                    <span className="text-sm text-muted-foreground">
+                                        {item.amount}
+                                    </span>
+                                </div>
+                                <div className="h-2 bg-muted rounded-full overflow-hidden">
+                                    <div
+                                        className="h-full bg-blue-500 rounded-full"
+                                        style={{ width: `${item.percent}%` }}
+                                    />
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </div>
+
+            {/* Recent Transactions */}
+            <div className="px-4 mb-4">
+                <div className="flex items-center justify-between mb-3">
+                    <h2 className="text-lg font-semibold text-foreground">
+                        Recent transactions
+                    </h2>
+                    <button className="text-blue-600 dark:text-blue-400 text-sm font-medium">
+                        See all
+                    </button>
+                </div>
+                <div className="bg-card rounded-2xl p-4 shadow-sm border border-border">
+                    <div className="space-y-3">
+                        {recentTransactions.map((item) => (
+                            <div
+                                key={item.label}
+                                className="flex items-center justify-between"
+                            >
+                                <div>
+                                    <p className="text-sm font-medium text-foreground">
+                                        {item.label}
+                                    </p>
+                                    <p className="text-xs text-muted-foreground">
+                                        {item.note}
+                                    </p>
+                                </div>
+                                <span className="text-sm font-semibold text-foreground">
+                                    {item.amount}
+                                </span>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </div>
+
+            <BottomNavigation activeTab="insights" onTabChange={onTabChange} />
+        </div>
+    );
 };

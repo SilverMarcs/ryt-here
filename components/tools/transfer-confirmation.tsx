@@ -52,9 +52,9 @@ export const TransferConfirmation = ({
         </Avatar>
       </CardHeader>
       <CardContent className="space-y-4 -mt-4">
-        <div className="rounded-2xl bg-muted/60 px-4 py-3">
-          <p className="text-sm text-muted-foreground">Amount</p>
-          <p className="text-3xl font-semibold">
+        <div className="rounded-2xl bg-white/10 border border-white/20 px-5 py-4">
+          <p className="text-xs text-white/60 mb-2 uppercase tracking-wide">Amount</p>
+          <p className="text-4xl font-bold text-white mb-1">
             <AmountDisplay
               amount={data.amount}
               currency={data.currency}
@@ -62,7 +62,7 @@ export const TransferConfirmation = ({
             />
           </p>
           {data.note ? (
-            <p className="mt-2 rounded-lg bg-card/80 px-3 py-2 text-xs">
+            <p className="mt-3 rounded-lg bg-white/5 border border-white/10 px-3 py-2 text-xs text-white/80">
               Note: {data.note}
             </p>
           ) : null}

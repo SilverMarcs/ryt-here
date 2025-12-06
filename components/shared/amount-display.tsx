@@ -21,9 +21,9 @@ export const AmountDisplay = ({
       className={
         emphasize
           ? isNegative
-            ? "text-rose-500 font-semibold"
-            : "text-emerald-600 font-semibold"
-          : "text-primary"
+            ? "text-rose-400 font-semibold"
+            : "text-emerald-400 font-semibold"
+          : "text-blue-400"
       }
     >
       {formatted}

@@ -34,15 +34,18 @@ export const MoneyRequestCard = ({
         <StatusBadge status={request.status} />
       </CardHeader>
       <CardContent className="space-y-4">
-        <div className="rounded-xl border border-dashed border-border bg-muted/40 p-3">
-          <p className="text-xs text-muted-foreground">Requesting from</p>
-          <p className="text-lg font-semibold">{request.recipientName}</p>
-          <p className="text-sm text-muted-foreground">
-            Amount: <AmountDisplay amount={request.amount} emphasize />
-          </p>
+        <div className="rounded-xl border border-dashed border-white/20 bg-white/5 p-4">
+          <p className="text-xs text-white/60 mb-1">Requesting from</p>
+          <p className="text-lg font-semibold text-white mb-3">{request.recipientName}</p>
+          <div className="bg-white/10 rounded-lg px-3 py-2 border border-white/20">
+            <p className="text-xs text-white/60 mb-1">Amount</p>
+            <p className="text-2xl font-bold text-white">
+              <AmountDisplay amount={request.amount} emphasize />
+            </p>
+          </div>
           {request.note ? (
-            <p className="text-sm text-muted-foreground">
-              Note: “{request.note}”
+            <p className="text-sm text-white/70 mt-3">
+              Note: "{request.note}"
             </p>
           ) : null}
         </div>
@@ -105,7 +108,7 @@ export const MoneyRequestConfirmation = ({
             Requesting {request.recipientName}
           </p>
         </div>
-        <div className="rounded-full bg-muted px-3 py-1 text-xs font-semibold text-foreground">
+        <div className="rounded-full bg-white/10 border border-white/20 px-3 py-1 text-xs font-semibold text-white">
           <AmountDisplay amount={request.amount} emphasize />
         </div>
       </CardHeader>

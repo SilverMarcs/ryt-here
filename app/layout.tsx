@@ -9,6 +9,16 @@ const jakarta = Plus_Jakarta_Sans({
   weight: ["400", "500", "600", "700"],
 });
 
+const themeInitScript = `
+(() => {
+  const root = document.documentElement;
+  const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+  const mode = prefersDark ? "dark" : "light";
+  root.classList.toggle("dark", mode === "dark");
+  root.style.setProperty("color-scheme", mode);
+})();
+`;
+
 export const metadata: Metadata = {
   title: "MyBank AI",
   description: "Chat-first digital banking assistant",
@@ -21,7 +31,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${jakarta.variable} min-h-screen bg-background text-foreground antialiased`}>
+      <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: themeInitScript,
+          }}
+        />
+      </head>
+      <body className={`${jakarta.variable} h-screen overflow-hidden bg-background text-foreground antialiased`}>
         <ThemeProvider>{children}</ThemeProvider>
       </body>
     </html>

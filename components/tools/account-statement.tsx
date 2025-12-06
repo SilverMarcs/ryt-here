@@ -84,54 +84,54 @@ export const AccountStatement = ({
               {periodLabel}
             </p>
           </div>
-          <div className="flex items-center gap-1 rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
+          <div className="flex items-center gap-1 rounded-full bg-blue-500/20 px-3 py-1 text-xs font-medium text-blue-400">
             {accountNumber}
           </div>
         </div>
 
         {/* Period Summary */}
         <div className="grid grid-cols-2 gap-3">
-          <div className="rounded-xl bg-muted/50 p-3">
-            <p className="text-xs text-muted-foreground">Opening Balance</p>
-            <p className="text-base font-semibold">
+          <div className="rounded-xl bg-white/5 p-3">
+            <p className="text-xs text-white/60">Opening Balance</p>
+            <p className="text-base font-semibold text-white">
               <AmountDisplay amount={openingBalance} currency={currency} />
             </p>
-            <p className="text-[10px] text-muted-foreground">
+            <p className="text-[10px] text-white/50">
               {formatDateDisplay(startDate)}
             </p>
           </div>
-          <div className="rounded-xl bg-muted/50 p-3">
-            <p className="text-xs text-muted-foreground">Closing Balance</p>
-            <p className="text-base font-semibold">
+          <div className="rounded-xl bg-white/5 p-3">
+            <p className="text-xs text-white/60">Closing Balance</p>
+            <p className="text-base font-semibold text-white">
               <AmountDisplay amount={closingBalance} currency={currency} />
             </p>
-            <p className="text-[10px] text-muted-foreground">
+            <p className="text-[10px] text-white/50">
               {formatDateDisplay(endDate)}
             </p>
           </div>
         </div>
 
         {/* Credits & Debits Summary */}
-        <div className="flex items-center justify-between rounded-xl bg-card border p-3">
+        <div className="flex items-center justify-between rounded-xl bg-white/5 border border-white/10 p-3">
           <div className="flex items-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-100 text-emerald-600">
+            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-500/20 text-emerald-400">
               <ArrowDownLeft className="h-4 w-4" />
             </div>
             <div>
-              <p className="text-xs text-muted-foreground">Money In</p>
-              <p className="text-sm font-semibold text-emerald-600">
+              <p className="text-xs text-white/60">Money In</p>
+              <p className="text-sm font-semibold text-emerald-400">
                 +<AmountDisplay amount={totalCredits} currency={currency} />
               </p>
             </div>
           </div>
-          <div className="h-8 w-px bg-border" />
+          <div className="h-8 w-px bg-white/20" />
           <div className="flex items-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-rose-100 text-rose-500">
+            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-rose-500/20 text-rose-400">
               <ArrowUpRight className="h-4 w-4" />
             </div>
             <div>
-              <p className="text-xs text-muted-foreground">Money Out</p>
-              <p className="text-sm font-semibold text-rose-500">
+              <p className="text-xs text-white/60">Money Out</p>
+              <p className="text-sm font-semibold text-rose-400">
                 -<AmountDisplay amount={totalDebits} currency={currency} />
               </p>
             </div>
@@ -139,10 +139,10 @@ export const AccountStatement = ({
         </div>
 
         {/* Net Change */}
-        <div className="flex items-center justify-between rounded-lg bg-muted/50 px-3 py-2">
-          <span className="text-xs text-muted-foreground">Net Change</span>
+        <div className="flex items-center justify-between rounded-lg bg-white/5 px-3 py-2">
+          <span className="text-xs text-white/60">Net Change</span>
           <span
-            className={`text-sm font-semibold ${netChange >= 0 ? "text-emerald-600" : "text-rose-500"}`}
+            className={`text-sm font-semibold ${netChange >= 0 ? "text-emerald-400" : "text-rose-400"}`}
           >
             {netChange >= 0 ? "+" : ""}
             <AmountDisplay amount={netChange} currency={currency} />

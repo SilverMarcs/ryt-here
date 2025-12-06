@@ -2,7 +2,7 @@ import { cn } from "@/lib/utils";
 
 const UserMessage = ({ children }: { children: React.ReactNode }) => (
   <div className="flex w-full justify-end">
-    <div className="max-w-[80%] rounded-2xl bg-primary px-3 py-2 text-sm font-semibold text-primary-foreground shadow-lg shadow-primary/20">
+    <div className="max-w-[80%] rounded-2xl bg-white/20 backdrop-blur-md border border-white/30 px-3 py-2 text-sm font-semibold text-white shadow-lg">
       {children}
     </div>
   </div>
@@ -21,7 +21,7 @@ const AssistantMessage = ({
         "text-sm",
         hasToolContent
           ? "w-full space-y-3"
-          : "max-w-[80%] space-y-3 rounded-2xl border border-border bg-muted px-3 py-2 pr-5 text-foreground shadow-lg backdrop-blur-sm",
+          : "max-w-[80%] space-y-3 rounded-2xl border border-white/20 bg-white/10 backdrop-blur-md px-3 py-2 pr-5 text-white shadow-lg",
       )}
     >
       {children}
