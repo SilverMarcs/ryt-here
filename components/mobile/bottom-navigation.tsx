@@ -25,55 +25,54 @@ export const BottomNavigation = ({
   ];
 
   return (
-    <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-md bg-white border-t border-gray-200 z-50">
-      <div className="flex items-center justify-around py-2">
+    <div 
+      className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-md bg-background border-t border-border z-50" 
+      style={{
+        height: "calc(3.5rem + max(0.5rem, env(safe-area-inset-bottom)))"
+      }}
+    >
+      <div className="flex items-center justify-around h-16">
         {tabs.map((tab) => {
           const isActive = activeTab === tab.id;
           return (
             <button
               key={tab.id}
               onClick={() => onTabChange?.(tab.id)}
-              className="flex flex-col items-center gap-1 py-2 px-3"
+              className="flex flex-col items-center justify-center gap-1 h-full min-w-0 flex-1"
             >
               {tab.id === "accounts" ? (
-                <div className="flex flex-col items-center">
+                <div className="flex flex-col items-center justify-center h-full">
                   <div
-                    className={`text-xs font-semibold mb-0.5 ${
-                      isActive ? "text-blue-600" : "text-gray-400"
+                    className={`text-xs font-semibold leading-tight ${
+                      isActive ? "text-blue-600 dark:text-blue-400" : "text-muted-foreground"
                     }`}
                   >
                     Ryt
                   </div>
                   <div
-                    className={`text-[10px] ${
-                      isActive ? "text-blue-600 font-medium" : "text-gray-500"
+                    className={`text-[10px] leading-tight ${
+                      isActive ? "text-blue-600 dark:text-blue-400" : "text-muted-foreground"
                     }`}
                   >
                     Accounts
                   </div>
-                  {isActive && (
-                    <div className="w-8 h-0.5 bg-blue-600 rounded-full mt-1" />
-                  )}
                 </div>
               ) : (
                 <>
                   {tab.icon && (
                     <tab.icon
-                      className={`w-5 h-5 ${
-                        isActive ? "text-blue-600" : "text-gray-400"
+                      className={`w-5 h-5 shrink-0 ${
+                        isActive ? "text-blue-600 dark:text-blue-400" : "text-muted-foreground"
                       }`}
                     />
                   )}
                   <span
-                    className={`text-[10px] ${
-                      isActive ? "text-blue-600 font-medium" : "text-gray-500"
+                    className={`text-[10px] leading-tight ${
+                      isActive ? "text-blue-600 dark:text-blue-400" : "text-muted-foreground"
                     }`}
                   >
                     {tab.label}
                   </span>
-                  {isActive && (
-                    <div className="w-8 h-0.5 bg-blue-600 rounded-full" />
-                  )}
                 </>
               )}
             </button>

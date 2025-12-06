@@ -19,20 +19,22 @@ const InsightCard = ({
     chartData,
 }: InsightCardProps) => {
     return (
-        <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
-            <div className="text-sm text-gray-600 mb-2">{title}</div>
+        <div className="bg-card rounded-2xl p-4 shadow-sm border border-border">
+            <div className="text-sm text-muted-foreground mb-2">{title}</div>
             {amount ? (
-                <div className="text-2xl font-bold mb-1">{amount}</div>
+                <div className="text-2xl font-bold text-foreground mb-1">
+                    {amount}
+                </div>
             ) : null}
             {detail ? (
-                <p className="text-sm text-gray-700 mb-3">{detail}</p>
+                <p className="text-sm text-foreground mb-3">{detail}</p>
             ) : null}
             {chartData && chartData.length ? (
                 <div className="flex items-end gap-1 h-12">
                     {chartData.map((value, index) => (
                         <div
                             key={`${title}-${index}`}
-                            className="flex-1 bg-gray-200 rounded-t"
+                            className="flex-1 bg-muted rounded-t"
                             style={{ height: `${value}%` }}
                         />
                     ))}
@@ -64,16 +66,22 @@ export const InsightsScreen = ({ onTabChange }: InsightsScreenProps) => {
     ];
 
     return (
-        <div className="bg-white min-h-full pb-20">
+        <div className="bg-background min-h-full pb-24 safe-area-inset-bottom">
             {/* Header */}
             <div className="px-4 py-6">
-                <h1 className="text-4xl font-serif mb-4">Insights</h1>
+                <h1 className="text-4xl font-serif text-foreground mb-4">
+                    Insights
+                </h1>
                 <div className="flex items-center gap-3">
-                    <button className="flex items-center gap-2 bg-gray-100 px-4 py-2 rounded-full">
-                        <span className="text-sm font-medium">This week</span>
-                        <ChevronDown className="w-4 h-4" />
+                    <button className="flex items-center gap-2 bg-muted px-4 py-2 rounded-full">
+                        <span className="text-sm font-medium text-foreground">
+                            This week
+                        </span>
+                        <ChevronDown className="w-4 h-4 text-foreground" />
                     </button>
-                    <span className="text-sm text-gray-600">{periodLabel}</span>
+                    <span className="text-sm text-muted-foreground">
+                        {periodLabel}
+                    </span>
                 </div>
             </div>
 
@@ -100,26 +108,26 @@ export const InsightsScreen = ({ onTabChange }: InsightsScreenProps) => {
             {/* Spending Section */}
             <div className="px-4 mb-4">
                 <div className="flex items-center justify-between mb-3">
-                    <h2 className="text-lg font-semibold">
+                    <h2 className="text-lg font-semibold text-foreground">
                         Spending breakdown
                     </h2>
-                    <button className="text-blue-600 text-sm font-medium">
+                    <button className="text-blue-600 dark:text-blue-400 text-sm font-medium">
                         See all
                     </button>
                 </div>
-                <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
+                <div className="bg-card rounded-2xl p-4 shadow-sm border border-border">
                     <div className="space-y-3">
                         {spendingBreakdown.map((item) => (
                             <div key={item.label}>
                                 <div className="flex items-center justify-between mb-1">
-                                    <span className="text-sm font-medium text-gray-800">
+                                    <span className="text-sm font-medium text-foreground">
                                         {item.label}
                                     </span>
-                                    <span className="text-sm text-gray-600">
+                                    <span className="text-sm text-muted-foreground">
                                         {item.amount}
                                     </span>
                                 </div>
-                                <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
+                                <div className="h-2 bg-muted rounded-full overflow-hidden">
                                     <div
                                         className="h-full bg-blue-500 rounded-full"
                                         style={{ width: `${item.percent}%` }}
@@ -134,14 +142,14 @@ export const InsightsScreen = ({ onTabChange }: InsightsScreenProps) => {
             {/* Recent Transactions */}
             <div className="px-4 mb-4">
                 <div className="flex items-center justify-between mb-3">
-                    <h2 className="text-lg font-semibold">
+                    <h2 className="text-lg font-semibold text-foreground">
                         Recent transactions
                     </h2>
-                    <button className="text-blue-600 text-sm font-medium">
+                    <button className="text-blue-600 dark:text-blue-400 text-sm font-medium">
                         See all
                     </button>
                 </div>
-                <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
+                <div className="bg-card rounded-2xl p-4 shadow-sm border border-border">
                     <div className="space-y-3">
                         {recentTransactions.map((item) => (
                             <div
@@ -149,14 +157,14 @@ export const InsightsScreen = ({ onTabChange }: InsightsScreenProps) => {
                                 className="flex items-center justify-between"
                             >
                                 <div>
-                                    <p className="text-sm font-medium text-gray-800">
+                                    <p className="text-sm font-medium text-foreground">
                                         {item.label}
                                     </p>
-                                    <p className="text-xs text-gray-500">
+                                    <p className="text-xs text-muted-foreground">
                                         {item.note}
                                     </p>
                                 </div>
-                                <span className="text-sm font-semibold text-gray-800">
+                                <span className="text-sm font-semibold text-foreground">
                                     {item.amount}
                                 </span>
                             </div>

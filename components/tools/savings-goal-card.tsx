@@ -96,8 +96,8 @@ const SingleGoalCard = ({
   return (
     <div
       className={`rounded-xl border p-4 space-y-3 transition-all ${
-        isHighlighted ? "ring-2 ring-primary/50 bg-primary/5" : "bg-card"
-      } ${isCompleted ? "bg-emerald-50/50 border-emerald-200" : ""}`}
+        isHighlighted ? "ring-2 ring-primary/50 bg-primary/5" : "bg-white/5"
+      } ${isCompleted ? "bg-emerald-500/10 border-emerald-500/30" : "border-white/20"}`}
     >
       {/* Header */}
       <div className="flex items-start justify-between">
@@ -105,8 +105,8 @@ const SingleGoalCard = ({
           <div
             className={`flex h-10 w-10 items-center justify-center rounded-full ${
               isCompleted
-                ? "bg-emerald-100 text-emerald-600"
-                : "bg-primary/10 text-primary"
+                ? "bg-emerald-500/20 text-emerald-400"
+                : "bg-blue-500/20 text-blue-400"
             }`}
           >
             {isCompleted ? (
@@ -126,7 +126,7 @@ const SingleGoalCard = ({
           </div>
         </div>
         {isCompleted && (
-          <span className="text-xs font-medium text-emerald-600 bg-emerald-100 px-2 py-0.5 rounded-full">
+          <span className="text-xs font-medium text-emerald-400 bg-emerald-500/20 px-2 py-0.5 rounded-full">
             Completed!
           </span>
         )}
@@ -147,9 +147,9 @@ const SingleGoalCard = ({
 
       {/* Remaining */}
       {!isCompleted && (
-        <div className="flex items-center justify-between text-xs bg-muted/50 rounded-lg px-3 py-2">
-          <span className="text-muted-foreground">Remaining</span>
-          <span className="font-semibold">
+        <div className="flex items-center justify-between text-xs bg-white/5 rounded-lg px-3 py-2">
+          <span className="text-white/60">Remaining</span>
+          <span className="font-semibold text-white">
             <AmountDisplay amount={remaining} currency={currency} />
           </span>
         </div>
@@ -256,8 +256,8 @@ if (goal && !goals) {
           <div
             className={`flex items-center gap-1 rounded-full px-3 py-1 text-xs font-medium
               ${isCompleted
-                ? "bg-emerald-100 text-emerald-700"
-                : "bg-primary/10 text-primary"
+                ? "bg-emerald-500/20 text-emerald-400"
+                : "bg-blue-500/20 text-blue-400"
               }`}
           >
             {isCompleted ? (
@@ -319,7 +319,7 @@ if (goal && !goals) {
               {activeGoals.length} Active Goal{activeGoals.length !== 1 ? "s" : ""}
             </p>
           </div>
-          <div className="flex items-center gap-1 rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
+          <div className="flex items-center gap-1 rounded-full bg-blue-500/20 px-3 py-1 text-xs font-medium text-blue-400">
             <PiggyBank className="h-3 w-3" />
             {completedGoals.length} completed
           </div>
@@ -327,15 +327,15 @@ if (goal && !goals) {
 
         {/* Summary Stats */}
         <div className="grid grid-cols-2 gap-3">
-          <div className="rounded-xl bg-muted/50 p-3">
-            <p className="text-xs text-muted-foreground">Total Saved</p>
-            <p className="text-base font-semibold text-emerald-600">
+          <div className="rounded-xl bg-white/5 p-3">
+            <p className="text-xs text-white/60">Total Saved</p>
+            <p className="text-base font-semibold text-emerald-400">
               <AmountDisplay amount={totalSaved} currency={currency} />
             </p>
           </div>
-          <div className="rounded-xl bg-muted/50 p-3">
-            <p className="text-xs text-muted-foreground">Total Target</p>
-            <p className="text-base font-semibold">
+          <div className="rounded-xl bg-white/5 p-3">
+            <p className="text-xs text-white/60">Total Target</p>
+            <p className="text-base font-semibold text-white">
               <AmountDisplay amount={totalTarget} currency={currency} />
             </p>
           </div>

@@ -75,16 +75,16 @@ export const QuickActionsPopup = ({
 
       {/* Popup positioned above the button */}
       <div className="absolute bottom-full left-0 mb-2 w-80 animate-in fade-in slide-in-from-bottom-2 duration-200 z-50">
-        <div className="rounded-xl border border-border bg-popover shadow-xl backdrop-blur-none">
+        <div className="rounded-xl border border-white/20 bg-slate-900/95 shadow-xl backdrop-blur-md">
           {/* Header */}
-          <div className="border-b border-border bg-popover px-4 py-3">
-            <h3 className="text-sm font-semibold text-popover-foreground">
+          <div className="border-b border-white/10 px-4 py-3">
+            <h3 className="text-sm font-semibold text-white">
               Quick Actions
             </h3>
           </div>
 
           {/* Actions List */}
-          <div className="max-h-[400px] overflow-y-auto p-2 bg-popover">
+          <div className="max-h-[400px] overflow-y-auto p-2">
             {quickActions.map((action) => (
               <button
                 key={action.id}
@@ -92,16 +92,16 @@ export const QuickActionsPopup = ({
                   onSelectAction(action.prompt);
                   onClose();
                 }}
-                className="group flex w-full items-start gap-3 rounded-lg p-3 text-left transition-all hover:bg-muted active:scale-[0.98]"
+                className="group flex w-full items-start gap-3 rounded-lg p-3 text-left transition-all hover:bg-white/10 active:scale-[0.98]"
               >
-                <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary transition-colors group-hover:bg-primary/20">
+                <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-blue-500/20 text-blue-400 transition-colors group-hover:bg-blue-500/30">
                   {action.icon}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <div className="text-sm font-medium text-foreground">
+                  <div className="text-sm font-medium text-white">
                     {action.label}
                   </div>
-                  <div className="text-xs text-muted-foreground">
+                  <div className="text-xs text-white/60">
                     {action.description}
                   </div>
                 </div>

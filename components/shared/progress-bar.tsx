@@ -33,15 +33,15 @@ export const ProgressBar = ({
 
   return (
     <div className={cn("space-y-1", className)}>
-      {label ? <p className="text-xs text-muted-foreground">{label}</p> : null}
-      <div className="h-2 overflow-hidden rounded-full bg-muted">
+      {label ? <p className="text-xs text-white/60">{label}</p> : null}
+      <div className="h-2 overflow-hidden rounded-full bg-white/10">
         <div
           className={cn("h-full rounded-full transition-[width]", variantStyles[variant])}
           style={{ width: `${percent}%` }}
         />
       </div>
       {showPercent && (
-        <p className="text-xs font-semibold text-foreground">
+        <p className="text-xs font-semibold text-white">
           {percent.toFixed(0)}%
         </p>
       )}

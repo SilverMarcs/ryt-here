@@ -5,39 +5,39 @@ const variants: Record<
   { bg: string; text: string; dot: string; label?: string }
 > = {
   active: {
-    bg: "bg-emerald-50 text-emerald-700",
-    text: "text-emerald-700",
-    dot: "bg-emerald-500",
+    bg: "bg-emerald-500/20 text-emerald-400",
+    text: "text-emerald-400",
+    dot: "bg-emerald-400",
     label: "Active",
   },
   frozen: {
-    bg: "bg-slate-100 text-slate-700",
-    text: "text-slate-700",
-    dot: "bg-slate-500",
+    bg: "bg-slate-500/20 text-slate-300",
+    text: "text-slate-300",
+    dot: "bg-slate-400",
     label: "Frozen",
   },
   pending: {
-    bg: "bg-amber-50 text-amber-700",
-    text: "text-amber-700",
-    dot: "bg-amber-500",
+    bg: "bg-amber-500/20 text-amber-400",
+    text: "text-amber-400",
+    dot: "bg-amber-400",
     label: "Pending",
   },
   paid: {
-    bg: "bg-emerald-50 text-emerald-700",
-    text: "text-emerald-700",
-    dot: "bg-emerald-500",
+    bg: "bg-emerald-500/20 text-emerald-400",
+    text: "text-emerald-400",
+    dot: "bg-emerald-400",
     label: "Paid",
   },
   unpaid: {
-    bg: "bg-rose-50 text-rose-700",
-    text: "text-rose-700",
-    dot: "bg-rose-500",
+    bg: "bg-rose-500/20 text-rose-400",
+    text: "text-rose-400",
+    dot: "bg-rose-400",
     label: "Unpaid",
   },
   info: {
-    bg: "bg-blue-50 text-blue-700",
-    text: "text-blue-700",
-    dot: "bg-blue-500",
+    bg: "bg-blue-500/20 text-blue-400",
+    text: "text-blue-400",
+    dot: "bg-blue-400",
   },
 };
 

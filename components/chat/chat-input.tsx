@@ -1,5 +1,5 @@
 import { FormEvent } from "react";
-import { SendHorizonal, Zap } from "lucide-react";
+import { SendHorizonal } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
@@ -24,32 +24,21 @@ export const ChatInput = ({
                 event.preventDefault();
                 onSubmit(event);
             }}
-            className="flex items-center gap-2 mx-2"
+            className="flex items-center gap-2.5 w-full"
         >
-            <Button
-                type="button"
-                size="icon"
-                variant="secondary"
-                onClick={onQuickActionsClick}
-                aria-label="Quick actions"
-                className="transition-all hover:scale-105 active:scale-95"
-                // className="bg-white/10 backdrop-blur-md border border-white/20 text-white/60 hover:bg-white/20"
-            >
-                <Zap className="h-4 w-4" />
-            </Button>
             <Input
                 placeholder="I am Ryt Here..."
                 value={value}
                 onChange={(event) => onChange(event.target.value)}
                 disabled={disabled}
-                className="bg-white/10 backdrop-blur-md border-white/20 text-white placeholder:text-white/60 focus-visible:border-white/40 focus-visible:ring-white/20"
+                className="flex-1 rounded-full h-11 px-5 bg-white/10 backdrop-blur-md border border-white/20 text-white placeholder:text-white/50 focus-visible:border-white/40 focus-visible:ring-2 focus-visible:ring-white/20 transition-all"
             />
             <Button
                 type="submit"
                 size="icon"
                 variant="secondary"
                 disabled={disabled || !value.trim()}
-                className="bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-white/20 disabled:opacity-30"
+                className="rounded-full h-11 w-11 bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-white/20 hover:border-white/30 disabled:opacity-30 disabled:cursor-not-allowed shrink-0 transition-all hover:scale-105 active:scale-95"
             >
                 <SendHorizonal className="h-4 w-4" />
             </Button>

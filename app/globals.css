@@ -44,6 +44,7 @@
 }
 
 :root {
+    color-scheme: light;
     --radius: 0.625rem;
     /* Light mode theme */
     --background: oklch(0.99 0.005 270);
@@ -81,8 +82,9 @@
 }
 
 .dark {
+    color-scheme: dark;
     /* Same dark space theme */
-    --background: transparent;
+    --background: oklch(0.16 0.04 265);
     --foreground: oklch(0.95 0.01 270);
     --card: oklch(0.24 0.04 260 / 0.55);
     --card-foreground: oklch(0.95 0.01 270);
@@ -116,11 +118,38 @@
 }
 
 @layer base {
+    html {
+        @apply bg-background text-foreground;
+        min-height: 100%;
+    }
     * {
         @apply border-border outline-ring/50;
     }
     body {
         @apply bg-background text-foreground;
+        min-height: 100%;
+    }
+}
+
+/* Safe area insets for mobile devices */
+@layer utilities {
+    .pb-safe {
+        padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
+    }
+
+    .safe-area-inset-bottom {
+        padding-bottom: max(6rem, calc(6rem + env(safe-area-inset-bottom)));
+    }
+
+    .pt-safe {
+        padding-top: max(0.5rem, env(safe-area-inset-top, 0px));
+    }
+}
+
+/* Mobile browser chrome compensation */
+@supports (height: 100dvh) {
+    .mobile-chat-container {
+        padding-top: env(safe-area-inset-top, 0px);
     }
 }
 

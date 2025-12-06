@@ -9,7 +9,7 @@ export const RoundButton = ({ icon, label }: RoundButtonProps) => {
       <button className="w-14 h-14 bg-blue-600 rounded-full flex items-center justify-center">
         {icon}
       </button>
-      <span className="text-xs text-gray-600">{label}</span>
+      <span className="text-xs text-muted-foreground">{label}</span>
     </div>
   );
 };

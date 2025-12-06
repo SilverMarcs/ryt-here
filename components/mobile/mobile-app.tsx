@@ -117,10 +117,10 @@ export function MobileApp() {
     const mobileContainerRef = React.useRef<HTMLDivElement>(null);
 
     return (
-        <div className="bg-gray-100 h-screen overflow-hidden relative">
+        <div className="bg-muted h-screen overflow-hidden relative">
             <div
                 ref={mobileContainerRef}
-                className="max-w-md mx-auto bg-white shadow-2xl h-full overflow-y-auto overflow-x-hidden relative"
+                className="max-w-md mx-auto bg-background shadow-2xl h-full overflow-y-auto overflow-x-hidden relative"
             >
                 {/* Home Screen */}
                 <div
@@ -160,9 +160,12 @@ export function MobileApp() {
 
                 {/* Chat Screen */}
                 {isChatOpen && (
-                    <div className="absolute inset-0 z-40 h-full w-full">
+                    <div
+                        className="fixed inset-0 z-40 h-screen w-full dark flex items-center justify-center"
+                        style={{ height: "100dvh" }}
+                    >
                         <BankProvider>
-                            <div className="h-full w-full overflow-hidden relative">
+                            <div className="h-full w-full max-w-md mx-auto overflow-hidden relative">
                                 {/* Pulsing gradient background */}
                                 <div className="absolute inset-0 ai-chat-bg opacity-100">
                                     <div className="orb orb-1" />
@@ -172,11 +175,15 @@ export function MobileApp() {
                                 </div>
                                 <div className="relative z-10 h-full flex flex-col">
                                     <div
-                                        className={`flex-1 min-h-0 flex flex-col overflow-hidden px-4 sm:px-6 transition-opacity duration-300 ${
+                                        className={`h-full flex flex-col overflow-hidden px-4 sm:px-6 transition-opacity duration-300 ${
                                             showChatContent
                                                 ? "opacity-100"
                                                 : "opacity-0"
                                         }`}
+                                        style={{
+                                            paddingTop:
+                                                "max(2rem, calc(env(safe-area-inset-top, 0px) + 1.5rem))",
+                                        }}
                                     >
                                         <div className="flex items-center justify-between mb-4 pt-2 shrink-0">
                                             <button
@@ -213,7 +220,7 @@ export function MobileApp() {
 
                 {/* Profile Screen */}
                 {isProfileOpen && (
-                    <div className="absolute inset-0 z-40 h-full w-full bg-white animate-in slide-in-from-right duration-300">
+                    <div className="absolute inset-0 z-40 h-full w-full bg-background animate-in slide-in-from-right duration-300">
                         <UserProfileScreen onClose={handleCloseProfile} />
                     </div>
                 )}

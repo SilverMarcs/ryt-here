@@ -22,13 +22,13 @@ const iconMap: Record<TransactionCategory, JSX.Element> = {
 };
 
 const colors: Record<TransactionCategory, string> = {
-  food: "bg-orange-100 text-orange-700",
-  transport: "bg-sky-100 text-sky-700",
-  utilities: "bg-amber-100 text-amber-700",
-  entertainment: "bg-fuchsia-100 text-fuchsia-700",
-  shopping: "bg-emerald-100 text-emerald-700",
-  transfer: "bg-blue-100 text-blue-700",
-  income: "bg-lime-100 text-lime-700",
+  food: "bg-orange-500/20 text-orange-400",
+  transport: "bg-sky-500/20 text-sky-400",
+  utilities: "bg-amber-500/20 text-amber-400",
+  entertainment: "bg-fuchsia-500/20 text-fuchsia-400",
+  shopping: "bg-emerald-500/20 text-emerald-400",
+  transfer: "bg-blue-500/20 text-blue-400",
+  income: "bg-lime-500/20 text-lime-400",
 };
 
 export const CategoryIcon = ({
