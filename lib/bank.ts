@@ -319,7 +319,7 @@ export const createMoneyRequest = (
     expiresAt: expiresAt.toISOString(),
   };
 
-  const shareUrl = `https://mybank.com/pay/${request.id}`;
+  const shareUrl = `https://ryt-here.com/pay/${request.id}`;
 
   return {
     newState: {

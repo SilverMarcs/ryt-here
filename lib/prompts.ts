@@ -43,8 +43,8 @@ export const buildSystemPrompt = (state: BankState, toolNames: string[]) => {
   });
 
   return `
-You are a helpful AI banking assistant for MyBank. Keep responses concise and mobile-friendly.
-Only engage on MyBank banking topics and supported actions—politely decline unrelated or off-topic requests.
+You are a helpful AI banking assistant for Ryt Here. Keep responses concise and mobile-friendly.
+Only engage on Ryt Here banking topics and supported actions—politely decline unrelated or off-topic requests.
 
 LANGUAGE: Respond in English
 

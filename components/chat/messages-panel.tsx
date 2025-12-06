@@ -15,18 +15,35 @@ interface MessagesPanelProps {
     hasTextContent: boolean;
     isAwaitingAnalysis: boolean;
   };
+  isScrollLocked?: boolean;
 }
 
 export const MessagesPanel = ({
   messages,
   status,
   getVisiblePartsForMessage,
+  isScrollLocked = false,
 }: MessagesPanelProps) => {
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
+  const scrollViewportRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, status]);
+
+  useEffect(() => {
+    // Lock/unlock scroll on viewport
+    if (scrollViewportRef.current) {
+      const viewport = scrollViewportRef.current.querySelector('[data-slot="scroll-area-viewport"]') as HTMLElement;
+      if (viewport) {
+        if (isScrollLocked) {
+          viewport.style.overflowY = "hidden";
+        } else {
+          viewport.style.overflowY = "";
+        }
+      }
+    }
+  }, [isScrollLocked]);
 
   const lastMessage = messages[messages.length - 1];
   const lastVisibility = lastMessage
@@ -42,9 +59,11 @@ export const MessagesPanel = ({
       lastVisibility.isAwaitingAnalysis);
 
   return (
-    <div className="flex h-full flex-col min-h-0">
-      <ScrollArea className="h-full flex-1 min-h-0">
-        <div className="flex flex-col gap-3 p-0">
+    <div ref={scrollViewportRef} className="flex h-full flex-col min-h-0 overflow-hidden">
+      <ScrollArea 
+        className="h-full flex-1 min-h-0"
+      >
+        <div className="flex flex-col gap-3 p-0 pb-2">
           {messages
             .map((message) => {
               const { hasToolContent, visibleParts } =

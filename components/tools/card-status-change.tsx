@@ -38,7 +38,7 @@ export const CardStatusChange = ({
                 <div className="relative overflow-hidden rounded-xl border border-border bg-gradient-to-br from-slate-800 via-slate-700 to-slate-600 p-4 text-white shadow-lg">
                     <div className="mb-6 flex items-center justify-between">
                         <span className="text-sm font-semibold tracking-wide">
-                            MyBank
+                            I'm Ryt Here
                         </span>
                         <CreditCard className="h-6 w-6 opacity-80" />
                     </div>
